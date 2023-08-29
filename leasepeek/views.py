@@ -1,8 +1,5 @@
 from django.shortcuts import render
 from .models import user_collection
-from django.http import HttpResponse
-
-
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication
@@ -21,39 +18,9 @@ from django.utils.decorators import method_decorator
 from rest_framework.authentication import SessionAuthentication
 import pandas as pd
 from .xlsx_reader import read_rentroll
-from .serializer_unit import UnitSerializer
+# from .serializer_unit import UnitSerializer
 
-
-@csrf_exempt
-def excel_data(request):
-	if request.method == 'POST':
-		print("EXCEL DATA POST REQUEST RECEIVED")
-		if 'file' in request.FILES:
-			file_obj = request.FILES['file']
-			try:
-				data_frame = pd.read_excel(file_obj)
-				data = read_rentroll(data_frame)
-				rentroll_units = data[1]["Tenants"]
-				# for unit in rentroll_units:
-				# 	UnitSerializer.create(unit)
-				rentroll_background = data[0]
-				rentroll_summary_groups = data[2]
-				rentroll_summary_charges = data[3]
-				return JsonResponse({"message": "Excel file processed successfully."})
-			except Exception as e:
-				print(f"Error processing excel file: {e}")
-				return JsonResponse({"message": "Error processing excel file."})
-		else:
-			return JsonResponse({"message": "No file attached."})
-	return JsonResponse({"message": "Invalid request method."})
-
-# TO BE FIXED LATER. looking for support to fix issue with Django's Rest Frameworks authorization and permissions.
-class UploadExcelView(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = (SessionAuthentication,)
-	def post(self, request):
-		return Response({"message": "Reached the excel upload view"}, status=200)
-
+###### USERS 
 
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
@@ -93,15 +60,45 @@ class UserView(APIView):
 		serializer = UserSerializer(request.user)
 		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
+###### DATA 
 
+@csrf_exempt
+def excel_data(request):
+	if request.method == 'POST':
+		print("EXCEL DATA POST REQUEST RECEIVED")
+		if 'file' in request.FILES:
+			file_obj = request.FILES['file']
+			try:
+				data_frame = pd.read_excel(file_obj)
+				data = read_rentroll(data_frame)
+				rentroll_units = data[1]["Tenants"]
+				# for unit in rentroll_units:
+				# 	UnitSerializer.create(unit)
+				rentroll_background = data[0]
+				rentroll_summary_groups = data[2]
+				rentroll_summary_charges = data[3]
+				return JsonResponse({"message": "Excel file processed successfully."})
+			except Exception as e:
+				print(f"Error processing excel file: {e}")
+				return JsonResponse({"message": "Error processing excel file."})
+		else:
+			return JsonResponse({"message": "No file attached."})
+	return JsonResponse({"message": "Invalid request method."})
+
+# TO BE FIXED LATER. looking for support to fix issue with Django's Rest Frameworks authorization and permissions.
+class UploadExcelView(APIView):
+	permission_classes = (permissions.AllowAny,)
+	authentication_classes = (SessionAuthentication,)
+	def post(self, request):
+		return Response({"message": "Reached the excel upload view"}, status=200)
 
 def index(request):
     return HttpResponse("<h1>App is running...</h1>")
 
 def add_user(request):
     records = {
-        "username": "Murphy",
-        "email": "murphy@dog.co"
+        "username": "Andrew",
+        "email": "andrew@dogdad.com"
     }
     user_collection.insert_one(records)
     return HttpResponse("New user added")
@@ -109,4 +106,3 @@ def add_user(request):
 def get_all_users(request):
     users = user_collection.find()
     return HttpResponse(users)
-
