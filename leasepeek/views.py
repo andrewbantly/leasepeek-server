@@ -17,7 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework.authentication import SessionAuthentication
 import pandas as pd
-from .xlsx_reader import read_rentroll
+from leasepeek.readers.xlsx_reader import read_rentroll
 # from .serializer_unit import UnitSerializer
 
 ###### USERS 
