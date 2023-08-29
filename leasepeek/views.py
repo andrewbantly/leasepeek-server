@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import user_collection
+from .mongo_models import user_collection
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication
@@ -25,6 +25,7 @@ from leasepeek.readers.xlsx_reader import read_rentroll
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
 	def post(self, request):
+		print("Request data:", request.data)
 		clean_data = custom_validation(request.data)
 		serializer = UserRegisterSerializer(data=clean_data)
 		if serializer.is_valid(raise_exception=True):

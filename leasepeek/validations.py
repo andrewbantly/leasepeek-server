@@ -6,6 +6,9 @@ def custom_validation(data):
     email = data['email'].strip()
     username = data['username'].strip()
     password = data['password'].strip()
+    existing_users = UserModel.objects.filter(email=email)
+    print("Existing users with email:", existing_users)
+
     ##
     if not email or UserModel.objects.filter(email=email).exists():
         raise ValidationError('choose another email')
