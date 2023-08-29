@@ -19,6 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('leasepeek.urls.user_urls')),
+    path('api/', include('leasepeek.urls.user_urls')),
     path('', include('leasepeek.urls.mongo_test')),
 ]
