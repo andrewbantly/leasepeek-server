@@ -67,14 +67,15 @@ class UserView(APIView):
 def excel_data(request):
 	if request.method == 'POST':
 		print("EXCEL DATA POST REQUEST RECEIVED")
+		print(request.headers)
 		if 'file' in request.FILES:
 			file_obj = request.FILES['file']
 			try:
 				data_frame = pd.read_excel(file_obj)
 				data = read_rentroll(data_frame)
-				rentroll_units = data[1]["Tenants"]
-				for unit in rentroll_units:
-					data_collection.insert_one(unit)
+				rentroll_units = data[0]["Tenants"]
+				# for unit in rentroll_units:
+				# 	data_collection.insert_one(unit)
 				rentroll_background = data[0]
 				rentroll_summary_groups = data[2]
 				rentroll_summary_charges = data[3]

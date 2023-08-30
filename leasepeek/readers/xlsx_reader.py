@@ -16,7 +16,7 @@ def read_rentroll(data_frame):
     as_of_date_strip = as_of_split[1].strip()
     as_of_date = datetime.strptime(as_of_date_strip, "%m/%d/%Y")
     as_of_date_formatted = as_of_date.strftime("%m-%d-%Y")
-    building_info = {"Location": building, "As of date": as_of_date_formatted}
+    # building_info = {"Location": building, "As of date": as_of_date_formatted}
 
     # find the start of the unit information
     i = 0 
@@ -53,6 +53,8 @@ def read_rentroll(data_frame):
             lease_expire_date  = df.iloc[i,11]
             move_out_date  = df.iloc[i,12]
             balance  = df.iloc[i,13]
+            c["building"] = building
+            c["date"] = as_of_date_formatted
             c["status"] = status
             c["unit"] = unit
             c["unitType"] = unit_type
@@ -60,7 +62,9 @@ def read_rentroll(data_frame):
             c["resident"] = res_id
             c["name"] = res_name
             c["marketRent"] = market_rent
-            c[charge_line] = amount_line
+            if str(charge_line) != "nan" and str(amount_line) != "nan":
+                c[charge_line] = amount_line
+                # print(charge_line, amount_line)
             c["resDeposit"] = res_deposit
             c["otherDeposit"] = other_deposit
             if str(move_in_date) != "nan":
@@ -83,7 +87,10 @@ def read_rentroll(data_frame):
             charge_line = df.iloc[i, 6]
             amount_line = df.iloc[i, 7]
             if str(charge_line) != "nan" and str(amount_line) != "nan":
-                c[charge_line.lower()] = amount_line
+                if charge_line in c:
+                    c[charge_line] += amount_line
+                else:
+                    c[charge_line] = amount_line
         i += 1
 
     # Summary Group info
@@ -120,7 +127,8 @@ def read_rentroll(data_frame):
             g["Percentage Sqft Occupied"] = sqft_occupied
             g["Balance"] = balance
         i += 1
-    print(residents_list)
+    # print(residents_list)
+
     # Summary charges info
     max_row = df.iloc[:,0].last_valid_index()
     summary_charges_scan = False
@@ -139,7 +147,7 @@ def read_rentroll(data_frame):
             if cell_obj == "Charge Code":
                 summary_charges_scan = True
 
-    rent_roll_list = [ building_info, 
+    rent_roll_list = [ #building_info, 
                       {"Tenants": residents_list},
                       {"Summary Groups": summary_groups},
                       {"Summary Charges": summary_charges}
