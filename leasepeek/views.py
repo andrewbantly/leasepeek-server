@@ -18,7 +18,9 @@ from django.utils.decorators import method_decorator
 from rest_framework.authentication import SessionAuthentication
 import pandas as pd
 from leasepeek.readers.xlsx_reader import read_rentroll
+import hashlib
 # from .serializer_unit import UnitSerializer
+
 
 ###### USERS 
 
@@ -64,21 +66,22 @@ class UserView(APIView):
 ###### DATA 
 
 @csrf_exempt
-def excel_data(request):
+def download_excel_data(request):
 	if request.method == 'POST':
 		print("EXCEL DATA POST REQUEST RECEIVED")
-		print(request.headers)
-		if 'file' in request.FILES:
+		user = request.user
+		user_id = user.user_id
+		if 'file' in request.FILES and user.is_authenticated:
 			file_obj = request.FILES['file']
 			try:
 				data_frame = pd.read_excel(file_obj)
-				data = read_rentroll(data_frame)
+				data = read_rentroll(data_frame, user_id)
 				rentroll_units = data[0]["Tenants"]
-				# for unit in rentroll_units:
-				# 	data_collection.insert_one(unit)
-				rentroll_background = data[0]
-				rentroll_summary_groups = data[2]
-				rentroll_summary_charges = data[3]
+				for unit in rentroll_units:
+					data_collection.insert_one(unit)
+				# rentroll_background = data[0]
+				rentroll_summary_groups = data[1]
+				rentroll_summary_charges = data[2]
 				return JsonResponse({"message": "Excel file processed successfully."})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
@@ -86,6 +89,13 @@ def excel_data(request):
 		else:
 			return JsonResponse({"message": "No file attached."})
 	return JsonResponse({"message": "Invalid request method."})
+
+
+@csrf_exempt
+def read_excel_data(request):
+	print("read excel data")
+
+
 
 # TO BE FIXED LATER. looking for support to fix issue with Django's Rest Frameworks authorization and permissions.
 class UploadExcelView(APIView):

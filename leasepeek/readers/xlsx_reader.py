@@ -7,7 +7,7 @@ class CustomJSONEncoder(json.JSONEncoder):
             return obj.strftime("%m-%d-%Y")
         return super().default(obj)
 
-def read_rentroll(data_frame):
+def read_rentroll(data_frame, user_id):
     df = data_frame
     # Building Data info
     building = df.iloc[0,0]
@@ -53,6 +53,7 @@ def read_rentroll(data_frame):
             lease_expire_date  = df.iloc[i,11]
             move_out_date  = df.iloc[i,12]
             balance  = df.iloc[i,13]
+            c["user_id"] = user_id
             c["building"] = building
             c["date"] = as_of_date_formatted
             c["status"] = status
