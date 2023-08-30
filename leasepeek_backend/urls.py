@@ -20,5 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('leasepeek.urls.user_urls')),
-    path('', include('leasepeek.urls.mongo_test')),
+    path('data/', include('leasepeek.urls.data_urls')),
+    path('test/', include('leasepeek.urls.mongo_test')),
 ]

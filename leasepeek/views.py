@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .mongo_models import user_collection
+from .mongo_models import user_collection, data_collection
 from django.contrib.auth import get_user_model, login, logout
 from django.shortcuts import render
 from rest_framework.authentication import SessionAuthentication
@@ -73,8 +73,8 @@ def excel_data(request):
 				data_frame = pd.read_excel(file_obj)
 				data = read_rentroll(data_frame)
 				rentroll_units = data[1]["Tenants"]
-				# for unit in rentroll_units:
-				# 	UnitSerializer.create(unit)
+				for unit in rentroll_units:
+					data_collection.insert_one(unit)
 				rentroll_background = data[0]
 				rentroll_summary_groups = data[2]
 				rentroll_summary_charges = data[3]
