@@ -79,10 +79,8 @@ def download_excel_data(request):
 				rentroll_units = data[0]["Tenants"]
 				for unit in rentroll_units:
 					data_collection.insert_one(unit)
-				# rentroll_background = data[0]
-				rentroll_summary_groups = data[1]
-				rentroll_summary_charges = data[2]
-				return JsonResponse({"message": "Excel file processed successfully."})
+				date = rentroll_units[0]['date']
+				return JsonResponse({"message": "Excel file processed successfully.", "date": date})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
 				return JsonResponse({"message": "Error processing excel file."})
@@ -94,11 +92,11 @@ def download_excel_data(request):
 @csrf_exempt
 def read_excel_data(request):
 	user = request.user
+	req_date = request.GET.get('date', None)
+	print("request date:", req_date)
 	if request.method == 'GET' and user.is_authenticated:
 		user_id = user.user_id
 		date = '03-27-2023'
-		print("user id:", user_id)
-		print("Is user authenticated?", user.is_authenticated)
 		cursor = data_collection.find({
 			'user_id': user_id,
 			'date': date
