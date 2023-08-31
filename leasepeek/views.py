@@ -96,6 +96,22 @@ def download_excel_data(request):
 			return JsonResponse({"message": "No file attached."})
 	return JsonResponse({"message": "Invalid request method."})
 
+@csrf_exempt
+def read_user_data(request):
+    user_id = request.user.user_id
+    print("User ID:", user_id)
+    
+    cursor = data_collection.find({
+        'user_id': user_id
+    }, {'building': 1, 'date': 1, '_id': 0})
+
+    buildings_and_dates = [{'building': doc.get('building'), 'date': doc.get('date')} for doc in cursor]
+
+    print("RESPONSE DATA")
+    print(buildings_and_dates)
+
+    return JsonResponse({"data": buildings_and_dates, "message": "Request for user building and date data received."})
+
 
 @csrf_exempt
 def read_excel_data(request):
