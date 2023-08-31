@@ -7,7 +7,7 @@ class CustomJSONEncoder(json.JSONEncoder):
             return obj.strftime("%m-%d-%Y")
         return super().default(obj)
 
-def read_rentroll(data_frame, user_id):
+def read_rentroll(data_frame):
     df = data_frame
     # Building Data info
     building = df.iloc[0,0]
@@ -16,7 +16,7 @@ def read_rentroll(data_frame, user_id):
     as_of_date_strip = as_of_split[1].strip()
     as_of_date = datetime.strptime(as_of_date_strip, "%m/%d/%Y")
     as_of_date_formatted = as_of_date.strftime("%m-%d-%Y")
-    # building_info = {"Location": building, "As of date": as_of_date_formatted}
+    building_info = {"Location": building, "As of date": as_of_date_formatted}
 
     # find the start of the unit information
     i = 0 
@@ -53,9 +53,8 @@ def read_rentroll(data_frame, user_id):
             lease_expire_date  = df.iloc[i,11]
             move_out_date  = df.iloc[i,12]
             balance  = df.iloc[i,13]
-            c["user_id"] = user_id
-            c["building"] = building
-            c["date"] = as_of_date_formatted
+            # c["building"] = building
+            # c["date"] = as_of_date_formatted
             c["status"] = status
             c["unit"] = unit
             c["unitType"] = unit_type
@@ -148,7 +147,7 @@ def read_rentroll(data_frame, user_id):
             if cell_obj == "Charge Code":
                 summary_charges_scan = True
 
-    rent_roll_list = [ #building_info, 
+    rent_roll_list = [ building_info, 
                       {"Tenants": residents_list},
                       {"Summary Groups": summary_groups},
                       {"Summary Charges": summary_charges}

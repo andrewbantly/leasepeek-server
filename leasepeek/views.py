@@ -75,11 +75,19 @@ def download_excel_data(request):
 			file_obj = request.FILES['file']
 			try:
 				data_frame = pd.read_excel(file_obj)
-				data = read_rentroll(data_frame, user_id)
-				rentroll_units = data[0]["Tenants"]
-				for unit in rentroll_units:
-					data_collection.insert_one(unit)
-				date = rentroll_units[0]['date']
+				data = read_rentroll(data_frame)
+				rentroll_units = data[1]["Tenants"]
+				date = data[0]['As of date']
+				building = data[0]['Location']
+				print(user_id, building, date)
+				data_collection.insert_one({
+					'user_id': user_id,
+					'building': building,
+					'date': date,
+					'data': rentroll_units,
+				})
+				# for unit in rentroll_units:
+				# 	data_collection.insert_one(unit)
 				return JsonResponse({"message": "Excel file processed successfully.", "date": date})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
