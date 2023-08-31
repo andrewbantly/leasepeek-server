@@ -67,11 +67,11 @@ class UserView(APIView):
 
 @csrf_exempt
 def download_excel_data(request):
-	if request.method == 'POST':
+	user = request.user
+	if request.method == 'POST' and user.is_authenticated:
 		print("EXCEL DATA POST REQUEST RECEIVED")
-		user = request.user
 		user_id = user.user_id
-		if 'file' in request.FILES and user.is_authenticated:
+		if 'file' in request.FILES:
 			file_obj = request.FILES['file']
 			try:
 				data_frame = pd.read_excel(file_obj)
@@ -93,7 +93,20 @@ def download_excel_data(request):
 
 @csrf_exempt
 def read_excel_data(request):
-	print("read excel data")
+	user = request.user
+	if request.method == 'GET' and user.is_authenticated:
+		user_id = user.user_id
+		date = '03-27-2023'
+		print("user id:", user_id)
+		print("Is user authenticated?", user.is_authenticated)
+		cursor = data_collection.find({
+			'user_id': user_id,
+			'date': date
+		})
+		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
+		return JsonResponse(results, safe=False)
+	return JsonResponse({"message": "Invalid request method."})
+
 
 
 
