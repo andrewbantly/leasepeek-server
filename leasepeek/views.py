@@ -129,7 +129,6 @@ def read_excel_data(request):
 			'_id': ObjectId(object_id)
 		})
 		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
-		print("RESULTS", results)
 		return JsonResponse(results, safe=False)
 	return JsonResponse({"message": "Invalid request method."})
 
