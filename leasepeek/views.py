@@ -19,6 +19,7 @@ from rest_framework.authentication import SessionAuthentication
 import pandas as pd
 from leasepeek.readers.xlsx_reader import read_rentroll
 import hashlib
+from bson.objectid import ObjectId
 # from .serializer_unit import UnitSerializer
 
 
@@ -120,16 +121,15 @@ def read_user_data(request):
 @csrf_exempt
 def read_excel_data(request):
 	user = request.user
-	req_date = request.GET.get('date', None)
-	print("request date:", req_date)
+	object_id = request.GET.get('id', None)
 	if request.method == 'GET' and user.is_authenticated:
 		user_id = user.user_id
-		date = '03-27-2023'
 		cursor = data_collection.find({
 			'user_id': user_id,
-			'date': date
+			'_id': ObjectId(object_id)
 		})
 		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
+		print("RESULTS", results)
 		return JsonResponse(results, safe=False)
 	return JsonResponse({"message": "Invalid request method."})
 
