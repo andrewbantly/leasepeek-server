@@ -103,9 +103,13 @@ def read_user_data(request):
     
     cursor = data_collection.find({
         'user_id': user_id
-    }, {'building': 1, 'date': 1, '_id': 0})
+    }, {'building': 1, 'date': 1})
 
-    buildings_and_dates = [{'building': doc.get('building'), 'date': doc.get('date')} for doc in cursor]
+    buildings_and_dates = [{
+		'building': doc.get('building'), 
+		'date': doc.get('date'),
+		'objectId': str(doc.get('_id'))
+		} for doc in cursor]
 
     print("RESPONSE DATA")
     print(buildings_and_dates)
