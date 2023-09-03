@@ -81,7 +81,7 @@ def download_excel_data(request):
 				date = data[0]['As of date']
 				building = data[0]['Location']
 				print(user_id, building, date)
-				data_collection.insert_one({
+				result = data_collection.insert_one({
 					'user_id': user_id,
 					'building': building,
 					'date': date,
@@ -89,7 +89,7 @@ def download_excel_data(request):
 				})
 				# for unit in rentroll_units:
 				# 	data_collection.insert_one(unit)
-				return JsonResponse({"message": "Excel file processed successfully.", "date": date})
+				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
 				return JsonResponse({"message": "Error processing excel file."})
