@@ -57,7 +57,7 @@ class UserView(APIView):
 ###### DATA 
 
 @csrf_exempt
-def download_excel_data(request):
+def process_excel_data(request):
 	user = request.user
 	if request.method == 'POST' and user.is_authenticated:
 		print("EXCEL DATA POST REQUEST RECEIVED")
