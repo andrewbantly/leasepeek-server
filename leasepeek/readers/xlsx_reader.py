@@ -17,11 +17,10 @@ def read_rentroll(data_frame):
     as_of_date_formatted = as_of_date.strftime("%m-%d-%Y")
     building_info = {"Location": building, "As of date": as_of_date_formatted}
 
-    # find the start of the unit information
+    # Unit information
     i = 0 
     while df.iloc[i, 0] != "Current/Notice/Vacant Residents":
         i += 1
-    # Residents of building info
     i += 1
     residents_scan = True
     residents_list = []

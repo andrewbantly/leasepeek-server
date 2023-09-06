@@ -60,7 +60,6 @@ class UserView(APIView):
 def process_excel_data(request):
 	user = request.user
 	if request.method == 'POST' and user.is_authenticated:
-		print("EXCEL DATA POST REQUEST RECEIVED")
 		user_id = user.user_id
 		if 'file' in request.FILES:
 			file_obj = request.FILES['file']
@@ -70,7 +69,6 @@ def process_excel_data(request):
 				rentroll_units = data[1]["Tenants"]
 				date = data[0]['As of date']
 				building = data[0]['Location']
-				print(user_id, building, date)
 				result = data_collection.insert_one({
 					'user_id': user_id,
 					'building': building,
