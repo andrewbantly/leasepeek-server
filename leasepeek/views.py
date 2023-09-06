@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
 from rest_framework import permissions, status
 from .validations import custom_validation, validate_email, validate_password
-from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
