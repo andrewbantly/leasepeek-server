@@ -1,4 +1,4 @@
-from .mongo_models import user_collection, data_collection
+from .mongo_models import data_collection
 from django.contrib.auth import login, logout
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.views import APIView
