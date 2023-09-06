@@ -9,7 +9,6 @@ class CustomJSONEncoder(json.JSONEncoder):
 
 def read_rentroll(data_frame):
     df = data_frame
-    # Building Data info
     building = df.iloc[0,0]
     as_of = str(df.iloc[1,0])
     as_of_split = as_of.split("=")
@@ -53,8 +52,6 @@ def read_rentroll(data_frame):
             lease_expire_date  = df.iloc[i,11]
             move_out_date  = df.iloc[i,12]
             balance  = df.iloc[i,13]
-            # c["building"] = building
-            # c["date"] = as_of_date_formatted
             c["status"] = status
             c["unit"] = unit
             c["unitType"] = unit_type
@@ -64,7 +61,6 @@ def read_rentroll(data_frame):
             c["marketRent"] = market_rent
             if str(charge_line) != "nan" and str(amount_line) != "nan":
                 c[charge_line] = amount_line
-                # print(charge_line, amount_line)
             c["resDeposit"] = res_deposit
             c["otherDeposit"] = other_deposit
             if str(move_in_date) != "nan":
@@ -127,7 +123,6 @@ def read_rentroll(data_frame):
             g["Percentage Sqft Occupied"] = sqft_occupied
             g["Balance"] = balance
         i += 1
-    # print(residents_list)
 
     # Summary charges info
     max_row = df.iloc[:,0].last_valid_index()
