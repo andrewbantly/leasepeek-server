@@ -87,8 +87,6 @@ def download_excel_data(request):
 					'date': date,
 					'data': rentroll_units,
 				})
-				# for unit in rentroll_units:
-				# 	data_collection.insert_one(unit)
 				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
