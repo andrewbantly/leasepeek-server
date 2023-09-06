@@ -120,28 +120,3 @@ def read_excel_data(request):
 		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
 		return JsonResponse(results, safe=False)
 	return JsonResponse({"message": "Invalid request method."})
-
-
-
-
-# TO BE FIXED LATER. looking for support to fix issue with Django's Rest Frameworks authorization and permissions.
-class UploadExcelView(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = (SessionAuthentication,)
-	def post(self, request):
-		return Response({"message": "Reached the excel upload view"}, status=200)
-
-def index(request):
-    return HttpResponse("<h1>App is running...</h1>")
-
-def add_user(request):
-    records = {
-        "username": "Andrew",
-        "email": "andrew@dogdad.com"
-    }
-    user_collection.insert_one(records)
-    return HttpResponse("New user added")
-
-def get_all_users(request):
-    users = user_collection.find()
-    return HttpResponse(users)
