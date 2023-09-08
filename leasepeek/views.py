@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
 import pandas as pd
 from leasepeek.readers.xlsx_reader import read_rentroll
+from leasepeek.readers.xlsx import read_xlsx
 from bson.objectid import ObjectId
 
 ###### USERS 
@@ -65,17 +66,19 @@ def process_excel_data(request):
 			file_obj = request.FILES['file']
 			try:
 				data_frame = pd.read_excel(file_obj)
-				data = read_rentroll(data_frame)
-				rentroll_units = data[1]["Tenants"]
-				date = data[0]['As of date']
-				building = data[0]['Location']
-				result = data_collection.insert_one({
-					'user_id': user_id,
-					'building': building,
-					'date': date,
-					'data': rentroll_units,
-				})
-				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
+				data = read_xlsx(data_frame)
+				# data = read_rentroll(data_frame)
+				# rentroll_units = data[1]["Tenants"]
+				# date = data[0]['As of date']
+				# building = data[0]['Location']
+				# result = data_collection.insert_one({
+				# 	'user_id': user_id,
+				# 	'building': building,
+				# 	'date': date,
+				# 	'data': rentroll_units,
+				# })
+				# return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
+				return JsonResponse({"message": "temp return message", "objectId": "12345"})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
 				return JsonResponse({"message": "Error processing excel file."})
