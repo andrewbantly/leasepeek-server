@@ -1,10 +1,6 @@
 from leasepeek.readers.reader_functions.property_name import find_property_name
 from leasepeek.readers.reader_functions.as_of_date import find_as_of_date
-
-def find_unit_data(df):
-    for i, row in df.iterrows():
-        row_str = ' '.join(row.dropna().astype(str))
-        print(row_str)
+from leasepeek.readers.reader_functions.unit_data import find_unit_data
 
 def read_xlsx(data_frame):
     df = data_frame
