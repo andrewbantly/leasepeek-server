@@ -65,7 +65,7 @@ def process_excel_data(request):
 		if 'file' in request.FILES:
 			file_obj = request.FILES['file']
 			try:
-				data_frame = pd.read_excel(file_obj)
+				data_frame = pd.read_excel(file_obj, header=None)
 				data = read_xlsx(data_frame)
 				# data = read_rentroll(data_frame)
 				# rentroll_units = data[1]["Tenants"]
