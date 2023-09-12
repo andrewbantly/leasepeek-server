@@ -1,6 +1,6 @@
+keywords = ['Building', 'Property', 'Village', 'Apartment', 'District', 'North', 'East', 'West', 'South', 'Shadows', 'Place', 'Street', 'Aveneue', 'Circle', 'Court', 'Place']
+
 def find_property_name(df):
-    print("Searching for property name")
-    keywords = ['Building', 'Property', 'Village', 'Apartment', 'District', 'North', 'East', 'West', 'South', 'Shadows', 'Place', 'Street', 'Aveneue', 'Circle', 'Court', 'Place']
     property_name = ''
     for i, row in df.iterrows():
         row_str = ' '.join(row.dropna().astype(str))
