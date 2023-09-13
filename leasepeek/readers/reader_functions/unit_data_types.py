@@ -1,8 +1,7 @@
 import pandas as pd
-# keywords = ['Unit Type']
 keywords = ['Unit Type', 'Floorplan', 'Unit Sq Ft', 'Name', 'Market Rent', 'Charge Code', 'Amount', 'Resident Deposit', 'Other Deposit', 'Move In', 'Lease Expiration', 'Move Out', 'Balance', 'Code', 'Deposit', 'Expiration', 'Sq Ft', 'SQFT', 'Balance']
 
-def find_unit_data(df):
+def find_unit_data_types(df):
     column_titles = []
 
     # Determine titles are in multiple rows
@@ -34,5 +33,5 @@ def find_unit_data(df):
             if any(keyword in row_str for keyword in keywords):
                 column_titles = row.dropna().astype(str).tolist()
                 column_titles = [title.replace('\n', ' ') for title in column_titles]
-
-    print(column_titles)
+    column_titles.append(title_rows.pop())
+    return column_titles
