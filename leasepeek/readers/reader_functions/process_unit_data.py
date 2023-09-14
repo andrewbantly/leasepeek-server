@@ -41,5 +41,5 @@ def process_unit_data(df, data_types):
     if current_unit: 
         all_units.append(current_unit)
     print()
-    print(all_units[0])
+    print(all_units[2])
     print()
