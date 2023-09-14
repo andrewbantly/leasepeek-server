@@ -9,7 +9,8 @@ def process_unit_data(df, data_types):
     current_unit = {}
     charge_line = ""
     charge_amount = None 
-
+    print()
+    print(data_types)
     for i, row in df.iloc[title_row_index:].iterrows():
         if df.iloc[i, 0] == "Total":
             if current_unit:
@@ -39,5 +40,6 @@ def process_unit_data(df, data_types):
 
     if current_unit: 
         all_units.append(current_unit)
-        
-    print(all_units[1])
+    print()
+    print(all_units[0])
+    print()
