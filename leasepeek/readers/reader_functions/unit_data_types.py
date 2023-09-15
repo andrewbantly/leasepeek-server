@@ -21,7 +21,7 @@ def find_unit_data_types(df):
         first_row = df.iloc[title_rows[0]].fillna(method='ffill').astype(str).tolist()  # forward fill NaN values
         second_row = df.iloc[title_rows[1]].fillna(method='ffill').astype(str).tolist()  # forward fill NaN values
 
-        seen_titles = set()
+        seen_titles = []
         # Concatenate the titles and populate the mapping
         for col in range(len(first_row)):
             title = first_row[col]
@@ -32,7 +32,7 @@ def find_unit_data_types(df):
             if title in seen_titles:
                 title = "nan"
             else:
-                seen_titles.add(title)
+                seen_titles.append(title)
 
             column_titles.append(title)
 
@@ -41,7 +41,7 @@ def find_unit_data_types(df):
 
     # Titles in single row
     else:
-        seen_titles = set()
+        seen_titles = []
         for index, row in df.head(15).iterrows():
             row = row.fillna(method='ffill').astype(str)  # forward fill NaN values
             row_str = ' '.join(row.dropna().astype(str))
@@ -53,7 +53,7 @@ def find_unit_data_types(df):
                         title = "nan"
                         column_titles.append(title)
                     else:
-                        seen_titles.add(title)
+                        seen_titles.append(title)
                         title = title.replace('\n', ' ')
                         column_titles.append(title)
                 for col, title in enumerate(column_titles):
