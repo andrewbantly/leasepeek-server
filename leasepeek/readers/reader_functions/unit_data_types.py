@@ -1,8 +1,10 @@
 import pandas as pd
+
 keywords = ['Unit Type', 'Floorplan', 'Unit Sq Ft', 'Name', 'Market Rent', 'Charge Code', 'Amount', 'Resident Deposit', 'Other Deposit', 'Move In', 'Lease Expiration', 'Move Out', 'Balance', 'Code', 'Deposit', 'Expiration', 'Sq Ft', 'SQFT', 'Balance']
 
 def find_unit_data_types(df):
     column_titles = []
+    title_column_mapping = {}
 
     # Determine titles are in multiple rows
     is_title_row = []
@@ -16,22 +18,47 @@ def find_unit_data_types(df):
     # Assuming the titles are in two consecutive rows
     title_rows = [i for i, x in enumerate(is_title_row) if x]
     if len(title_rows) >= 2:
-        first_row = df.iloc[title_rows[0]].astype(str).tolist()
-        second_row = df.iloc[title_rows[1]].astype(str).tolist()
+        first_row = df.iloc[title_rows[0]].fillna(method='ffill').astype(str).tolist()  # forward fill NaN values
+        second_row = df.iloc[title_rows[1]].fillna(method='ffill').astype(str).tolist()  # forward fill NaN values
 
-        # Concatenate the titles
+        seen_titles = set()
+        # Concatenate the titles and populate the mapping
         for col in range(len(first_row)):
             title = first_row[col]
             if not pd.isna(second_row[col]) and second_row[col] != "nan":
                 title += " " + second_row[col]
-            column_titles.append(title.strip())
+            title = title.strip().replace('\n', ' ')
+
+            if title in seen_titles:
+                title = "nan"
+            else:
+                seen_titles.add(title)
+
+            column_titles.append(title)
+
+            if title != "nan":
+                title_column_mapping[title] = col
 
     # Titles in single row
     else:
+        seen_titles = set()
         for index, row in df.head(15).iterrows():
+            row = row.fillna(method='ffill').astype(str)  # forward fill NaN values
             row_str = ' '.join(row.dropna().astype(str))
             if any(keyword in row_str for keyword in keywords):
-                column_titles = row.dropna().astype(str).tolist()
-                column_titles = [title.replace('\n', ' ') for title in column_titles]
-    column_titles.append(title_rows.pop())
-    return column_titles
+                column_titles_raw = row.dropna().astype(str).tolist()
+                column_titles = []
+                for title in column_titles_raw:
+                    if title in seen_titles:
+                        title = "nan"
+                        column_titles.append(title)
+                    else:
+                        seen_titles.add(title)
+                        title = title.replace('\n', ' ')
+                        column_titles.append(title)
+                for col, title in enumerate(column_titles):
+                    if title != "nan":
+                        title_column_mapping[title] = col
+    title_row = title_rows.pop()
+    title_column_mapping["Title Row"] = title_row
+    return title_column_mapping

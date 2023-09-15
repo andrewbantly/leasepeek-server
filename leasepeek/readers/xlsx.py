@@ -13,5 +13,5 @@ def read_xlsx(data_frame):
     # Find the different types of data
     unit_data_types = find_unit_data_types(data_frame)
 
-    # Process the unit data
+    # Process the unit
     processed_data = process_unit_data(data_frame, unit_data_types)
