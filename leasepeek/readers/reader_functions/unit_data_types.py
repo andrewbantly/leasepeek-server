@@ -50,11 +50,10 @@ def find_unit_data_types(df):
                 for title in column_titles_raw:
                     if title in seen_titles:
                         title = "nan"
-                        column_titles.append(title)
                     else:
                         seen_titles.append(title)
                         title = title.replace('\n', ' ')
-                        column_titles.append(title)
+                    column_titles.append(title)
                 for col, title in enumerate(column_titles):
                     if title != "nan":
                         title_column_mapping[title] = col
