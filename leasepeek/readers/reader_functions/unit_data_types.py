@@ -43,7 +43,7 @@ def find_unit_data_types(df):
     else:
         seen_titles = []
         for index, row in df.head(15).iterrows():
-            row = row.fillna(method='ffill').astype(str)  # forward fill NaN values
+            row = row.astype(str)
             row_str = ' '.join(row.dropna().astype(str))
             if any(keyword in row_str for keyword in keywords):
                 column_titles_raw = row.dropna().astype(str).tolist()
