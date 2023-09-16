@@ -18,9 +18,9 @@ def find_unit_data_types(df):
     # Assuming the titles are in two consecutive rows
     title_rows = [i for i, x in enumerate(is_title_row) if x]
     if len(title_rows) >= 2:
-        first_row = df.iloc[title_rows[0]].fillna(method='ffill').astype(str).tolist()  # forward fill NaN values
-        second_row = df.iloc[title_rows[1]].fillna(method='ffill').astype(str).tolist()  # forward fill NaN values
-
+        first_row = df.iloc[title_rows[0]].astype(str).tolist()  # forward fill NaN values
+        second_row = df.iloc[title_rows[1]].astype(str).tolist()  # forward fill NaN values
+        print("second row:", second_row)
         seen_titles = []
         # Concatenate the titles and populate the mapping
         for col in range(len(first_row)):
