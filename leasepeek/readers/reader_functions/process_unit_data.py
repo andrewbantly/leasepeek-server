@@ -3,15 +3,28 @@ import pandas as pd
 keywords = ['Total', 'Totals', 'Totals:', 'Total Market Rent', 'Applications', 'Summary Groups', 'Future Residents']
 
 def process_unit_data(df, data_types):
-    data_starting_row = data_types["Title Row"]
+    data_starting_row = data_types["Title Row"] + 1
     data_types.pop("Title Row")
-    print("")
-
+    data_ending_row = 0
     for i, row in df.iterrows():
         cell_value = str(row.iloc[0])
         if any(keyword in cell_value for keyword in keywords):
-            print(row)
-            print(i)
+            data_ending_row = i
             break
+    if data_ending_row == 0:
+        print("Data read error. No ending row for unit data recognized.")
+    
+    new_data_types = {}
+    for d in data_types:
+        new_data_types[data_types[d]] = d
 
-    print("")
+    data = {}
+    for i in range(data_starting_row, data_ending_row):
+        if df.iloc[i,0] == "Current/Notice/Vacant Residents":
+            continue
+    # iterate through each row and column
+    # use the hash table to match column value = column titles 
+    # add column title and value into a unit data object (not started)
+    # finish the loop, add the unit data object to the bigger data object
+
+        
