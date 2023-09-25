@@ -18,10 +18,16 @@ def process_unit_data(df, data_types):
     for d in data_types:
         new_data_types[data_types[d]] = d
 
-    data = {}
+    data = []
     for i in range(data_starting_row, data_ending_row):
+        current_unit = {}
         if df.iloc[i,0] == "Current/Notice/Vacant Residents":
             continue
+        for d in new_data_types:
+            current_unit[new_data_types[d]] = df.iloc[i, d]
+        data.append(current_unit)
+        current_unit = {}
+    print(data[1])
     # iterate through each row and column
     # use the hash table to match column value = column titles 
     # add column title and value into a unit data dictionary (not started)
