@@ -24,7 +24,7 @@ def process_unit_data(df, data_types):
             continue
     # iterate through each row and column
     # use the hash table to match column value = column titles 
-    # add column title and value into a unit data object (not started)
-    # finish the loop, add the unit data object to the bigger data object
+    # add column title and value into a unit data dictionary (not started)
+    # finish the loop, add the unit data dictionary to the bigger data dictionary
 
         
