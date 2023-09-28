@@ -19,21 +19,36 @@ def process_unit_data(df, data_types):
     new_data_types = {}
     charge_codes = {}
     for d in data_types:
-        if d not in charge_codes:
+        if d in charge_types:
+            charge_codes[data_types[d]] = d
+        else:
             new_data_types[data_types[d]] = d
-
-    data = []
     
+    data = []
+    find_charges = bool(charge_codes)
+    current_unit = {}
+    print(new_data_types)
     for i in range(data_starting_row, data_ending_row):
-        current_unit = {}
         if df.iloc[i,0] == "Current/Notice/Vacant Residents":
             continue
-        if str(df.iloc[i,0]) == "nan":
-            continue
-        for d in new_data_types:
-            current_unit[new_data_types[d]] = df.iloc[i, d]
-        data.append(current_unit)
-        current_unit = {}
+        if str(df.iloc[i,0]) != 'nan':
+            data.append(current_unit)
+            current_unit = {}           
+            for d in new_data_types:
+                current_unit[new_data_types[d]] = df.iloc[i, d]
+        if find_charges:
+            charge_line = str
+            charge_amount = int
+            for c in charge_codes:
+                if type(df.iloc[i, c]) == str:
+                    charge_line = df.iloc[i, c]
+                if type(df.iloc[i, c]) == int:
+                    charge_amount = df.iloc[i, c]
+                # this truthy / falsy statement doesn't seem to be working correctly
+                if charge_line and charge_amount:
+                    charge_line = str
+                    charge_amount = int
+        
     print(data[1])
     # iterate through each row and column
     # use the hash table to match column value = column titles 
