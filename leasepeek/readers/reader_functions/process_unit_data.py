@@ -2,6 +2,8 @@ import pandas as pd
 
 keywords = ['Total', 'Totals', 'Totals:', 'Total Market Rent', 'Applications', 'Summary Groups', 'Future Residents']
 
+charge_types = ['Charge Code', 'Amount', 'Rent Charge Description', 'Rent Charge Amount', 'Description', 'Charge Amount', 'Credit Amount']
+
 def process_unit_data(df, data_types):
     data_starting_row = data_types["Title Row"] + 1
     data_types.pop("Title Row")
@@ -15,13 +17,18 @@ def process_unit_data(df, data_types):
         print("Data read error. No ending row for unit data recognized.")
     
     new_data_types = {}
+    charge_codes = {}
     for d in data_types:
-        new_data_types[data_types[d]] = d
+        if d not in charge_codes:
+            new_data_types[data_types[d]] = d
 
     data = []
+    
     for i in range(data_starting_row, data_ending_row):
         current_unit = {}
         if df.iloc[i,0] == "Current/Notice/Vacant Residents":
+            continue
+        if str(df.iloc[i,0]) == "nan":
             continue
         for d in new_data_types:
             current_unit[new_data_types[d]] = df.iloc[i, d]
