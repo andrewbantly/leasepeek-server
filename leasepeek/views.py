@@ -12,7 +12,7 @@ import pandas as pd
 from leasepeek.readers.xlsx import read_xlsx
 from bson.objectid import ObjectId
 
-###### USERS 
+###### USERS
 
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
