@@ -27,27 +27,28 @@ def process_unit_data(df, data_types):
     data = []
     find_charges = bool(charge_codes)
     current_unit = {}
-    print(new_data_types)
+
     for i in range(data_starting_row, data_ending_row):
         if df.iloc[i,0] == "Current/Notice/Vacant Residents":
             continue
         if str(df.iloc[i,0]) != 'nan':
-            data.append(current_unit)
+            if current_unit:
+                data.append(current_unit)
             current_unit = {}           
             for d in new_data_types:
                 current_unit[new_data_types[d]] = df.iloc[i, d]
         if find_charges:
-            charge_line = str
-            charge_amount = int
+            charge_line = ""
+            charge_amount = 0
             for c in charge_codes:
                 if type(df.iloc[i, c]) == str:
                     charge_line = df.iloc[i, c]
                 if type(df.iloc[i, c]) == int:
                     charge_amount = df.iloc[i, c]
-                # this truthy / falsy statement doesn't seem to be working correctly
                 if charge_line and charge_amount:
-                    charge_line = str
-                    charge_amount = int
+                    current_unit[charge_line] = charge_amount
+                    charge_line = ""
+                    charge_amount = 0
         
     print(data[1])
     # iterate through each row and column
