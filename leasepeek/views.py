@@ -1,14 +1,13 @@
 from .mongo_models import data_collection
+from django.http import JsonResponse
 from django.contrib.auth import login, logout
-from rest_framework.authentication import SessionAuthentication
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
-from rest_framework import permissions, status
-from .validations import custom_validation, validate_email, validate_password
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
+from .validations import custom_validation, validate_email, validate_password
 import pandas as pd
 from leasepeek.readers.xlsx import read_xlsx
 from bson.objectid import ObjectId
