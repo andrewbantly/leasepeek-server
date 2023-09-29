@@ -7,5 +7,5 @@ def find_property_name(df):
         if any(keyword in row_str for keyword in keywords):
             property_name = row_str
             break
-    print("Property:", property_name)
+
     return property_name

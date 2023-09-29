@@ -59,4 +59,5 @@ def find_unit_data_types(df):
                         title_column_mapping[title] = col
     title_row = title_rows.pop()
     title_column_mapping["Title Row"] = title_row
+    
     return title_column_mapping
