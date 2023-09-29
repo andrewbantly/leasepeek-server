@@ -66,7 +66,7 @@ def process_excel_data(request):
 			file_obj = request.FILES['file']
 			try:
 				data_frame = pd.read_excel(file_obj, header=None)
-				unit_data = read_xlsx(data_frame)
+				unit_data = read_xlsx(data_frame, user_id)
 				result = data_collection.insert_one(unit_data)
 				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
 			except Exception as e:
@@ -83,10 +83,10 @@ def read_user_data(request):
     
     cursor = data_collection.find({
         'user_id': user_id
-    }, {'building': 1, 'date': 1})
+    }, {'location': 1, 'date': 1})
 
     buildings_and_dates = [{
-		'building': doc.get('building'), 
+		'location': doc.get('location'), 
 		'date': doc.get('date'),
 		'objectId': str(doc.get('_id'))
 		} for doc in cursor]

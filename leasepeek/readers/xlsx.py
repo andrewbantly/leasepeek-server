@@ -3,7 +3,7 @@ from leasepeek.readers.reader_functions.as_of_date import find_as_of_date
 from leasepeek.readers.reader_functions.unit_data_types import find_unit_data_types
 from leasepeek.readers.reader_functions.process_unit_data import process_unit_data
 
-def read_xlsx(data_frame):
+def read_xlsx(data_frame, user_id):
     # Find the name of the property
     property = find_property_name(data_frame)
 
@@ -16,9 +16,10 @@ def read_xlsx(data_frame):
     # Process the unit data
     processed_unit_data = process_unit_data(data_frame, unit_data_types)
 
-    unit_data = {'Location': property,
-                 'Date': as_of_date,
-                 'Data': processed_unit_data
+    unit_data = {'user_id': user_id,
+                 'location': property,
+                 'date': as_of_date,
+                 'data': processed_unit_data
                  }
     
     return unit_data
