@@ -10,7 +10,6 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication
 import pandas as pd
-from leasepeek.readers.xlsx_reader import read_rentroll
 from leasepeek.readers.xlsx import read_xlsx
 from bson.objectid import ObjectId
 
@@ -19,7 +18,6 @@ from bson.objectid import ObjectId
 class UserRegister(APIView):
 	permission_classes = (permissions.AllowAny,)
 	def post(self, request):
-		print("Request data:", request.data)
 		clean_data = custom_validation(request.data)
 		serializer = UserRegisterSerializer(data=clean_data)
 		if serializer.is_valid(raise_exception=True):
@@ -79,8 +77,6 @@ def process_excel_data(request):
 @csrf_exempt
 def read_user_data(request):
     user_id = request.user.user_id
-    print("User ID:", user_id)
-    
     cursor = data_collection.find({
         'user_id': user_id
     }, {'location': 1, 'date': 1})
@@ -90,9 +86,6 @@ def read_user_data(request):
 		'date': doc.get('date'),
 		'objectId': str(doc.get('_id'))
 		} for doc in cursor]
-
-    print("RESPONSE DATA")
-    print(buildings_and_dates)
 
     return JsonResponse({"data": buildings_and_dates, "message": "Request for user building and date data received."})
 
