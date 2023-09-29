@@ -66,19 +66,9 @@ def process_excel_data(request):
 			file_obj = request.FILES['file']
 			try:
 				data_frame = pd.read_excel(file_obj, header=None)
-				data = read_xlsx(data_frame)
-				# data = read_rentroll(data_frame)
-				# rentroll_units = data[1]["Tenants"]
-				# date = data[0]['As of date']
-				# building = data[0]['Location']
-				# result = data_collection.insert_one({
-				# 	'user_id': user_id,
-				# 	'building': building,
-				# 	'date': date,
-				# 	'data': rentroll_units,
-				# })
-				# return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
-				return JsonResponse({"message": "temp return message", "objectId": "12345"})
+				unit_data = read_xlsx(data_frame)
+				result = data_collection.insert_one(unit_data)
+				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
 				return JsonResponse({"message": "Error processing excel file."})
