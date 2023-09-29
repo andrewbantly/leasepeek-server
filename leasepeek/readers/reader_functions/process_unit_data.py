@@ -1,5 +1,3 @@
-import pandas as pd
-
 keywords = ['Total', 'Totals', 'Totals:', 'Total Market Rent', 'Applications', 'Summary Groups', 'Future Residents']
 
 charge_types = ['Charge Code', 'Amount', 'Rent Charge Description', 'Rent Charge Amount', 'Description', 'Charge Amount', 'Credit Amount']
@@ -9,6 +7,7 @@ unit_describers = ['Bldg/Unit', "Unit", "Unit Number", ]
 def process_unit_data(df, data_types):
     data_starting_row = data_types["Title Row"] + 1
     data_types.pop("Title Row")
+
     data_ending_row = 0
     for i, row in df.iterrows():
         cell_value = str(row.iloc[0])
@@ -56,11 +55,9 @@ def process_unit_data(df, data_types):
                     current_unit[charge_line] = charge_amount
                     charge_line = ""
                     charge_amount = 0
-        
-    print(data[1])
-    # iterate through each row and column
-    # use the hash table to match column value = column titles 
-    # add column title and value into a unit data dictionary (not started)
-    # finish the loop, add the unit data dictionary to the bigger data dictionary
+    data.append(current_unit) 
+
+    print(data)
+    return data
 
         
