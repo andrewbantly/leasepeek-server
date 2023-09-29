@@ -1,3 +1,6 @@
+import pandas as pd
+import datetime
+
 keywords = ['Total', 'Totals', 'Totals:', 'Total Market Rent', 'Applications', 'Summary Groups', 'Future Residents']
 
 charge_types = ['Charge Code', 'Amount', 'Rent Charge Description', 'Rent Charge Amount', 'Description', 'Charge Amount', 'Credit Amount']
@@ -42,7 +45,12 @@ def process_unit_data(df, data_types):
                 data.append(current_unit)
             current_unit = {}           
             for d in new_data_types:
-                current_unit[new_data_types[d]] = df.iloc[i, d]
+                cell_value = df.iloc[i,d]
+                if isinstance(cell_value, datetime.datetime):
+                    cell_value = cell_value.strftime('%Y-%m-%d')
+                if str(cell_value) == 'nan':
+                    cell_value = ''
+                current_unit[new_data_types[d]] = cell_value
         if find_charges:
             charge_line = ""
             charge_amount = 0
@@ -57,7 +65,6 @@ def process_unit_data(df, data_types):
                     charge_amount = 0
     data.append(current_unit) 
 
-    print(data)
     return data
 
         
