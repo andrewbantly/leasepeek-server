@@ -4,6 +4,8 @@ keywords = ['Total', 'Totals', 'Totals:', 'Total Market Rent', 'Applications', '
 
 charge_types = ['Charge Code', 'Amount', 'Rent Charge Description', 'Rent Charge Amount', 'Description', 'Charge Amount', 'Credit Amount']
 
+unit_describers = ['Bldg/Unit', "Unit", "Unit Number", ]
+
 def process_unit_data(df, data_types):
     data_starting_row = data_types["Title Row"] + 1
     data_types.pop("Title Row")
@@ -28,10 +30,15 @@ def process_unit_data(df, data_types):
     find_charges = bool(charge_codes)
     current_unit = {}
 
+    u = 0
+    for unit in unit_describers:
+        if unit in data_types:
+            u = data_types[unit]
+
     for i in range(data_starting_row, data_ending_row):
         if df.iloc[i,0] == "Current/Notice/Vacant Residents":
             continue
-        if str(df.iloc[i,0]) != 'nan':
+        if str(df.iloc[i,u]) != 'nan':
             if current_unit:
                 data.append(current_unit)
             current_unit = {}           
