@@ -11,6 +11,18 @@ from .validations import custom_validation, validate_email, validate_password
 import pandas as pd
 from leasepeek.readers.xlsx import read_xlsx
 from bson.objectid import ObjectId
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def protected_view(request):
+    print("did something happen?")
+
+
+
 
 ###### USERS
 

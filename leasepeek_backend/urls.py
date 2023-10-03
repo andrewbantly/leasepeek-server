@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('leasepeek.urls.user_urls')),
     path('data/', include('leasepeek.urls.data_urls')),
+    path('auth/', include('leasepeek.urls.auth_urls')),
 ]

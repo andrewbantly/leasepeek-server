@@ -21,5 +21,5 @@ def read_xlsx(data_frame, user_id):
                  'date': as_of_date,
                  'data': processed_unit_data
                  }
-    
+    print(unit_data)
     return unit_data
