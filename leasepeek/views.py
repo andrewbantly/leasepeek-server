@@ -1,12 +1,11 @@
 from .mongo_models import data_collection
 from django.http import JsonResponse
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import permissions, status
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authentication import SessionAuthentication
-from .serializers import UserRegisterSerializer, UserLoginSerializer, UserSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer
 from .validations import custom_validation, validate_email, validate_password
 import pandas as pd
 from leasepeek.readers.xlsx import read_xlsx
@@ -14,56 +13,61 @@ from bson.objectid import ObjectId
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.core.exceptions import ValidationError
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+	serializer_class = CustomTokenObtainPairSerializer
+	print("### Inside Custom View")
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def protected_view(request):
-    print("did something happen?")
-
-
-
+	...
 
 ###### USERS
 
-class UserRegister(APIView):
-	permission_classes = (permissions.AllowAny,)
+class RegisterUserView(APIView):
 	def post(self, request):
 		clean_data = custom_validation(request.data)
 		serializer = UserRegisterSerializer(data=clean_data)
 		if serializer.is_valid(raise_exception=True):
 			user = serializer.create(clean_data)
 			if user:
-				return Response(serializer.data, status=status.HTTP_201_CREATED)
+				token_serializer = CustomTokenObtainPairSerializer()
+				refresh = token_serializer.get_token_for_user(user)
+				return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                **serializer.data
+            }, status=status.HTTP_201_CREATED)
 		return Response(status=status.HTTP_400_BAD_REQUEST)
 
-class UserLogin(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = (SessionAuthentication,)
-	def post(self, request):
-		data = request.data
-		assert validate_email(data)
-		assert validate_password(data)
-		serializer = UserLoginSerializer(data=data)
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.check_user(data)
-			login(request, user)
-			return Response(serializer.data, status=status.HTTP_200_OK)
-
-class UserLogout(APIView):
-	permission_classes = (permissions.AllowAny,)
-	authentication_classes = ()
-	def post(self, request):
-		logout(request)
-		return Response(status=status.HTTP_200_OK)
-
-class UserView(APIView):
-	permission_classes = (permissions.IsAuthenticated,)
-	authentication_classes = (SessionAuthentication,)
-	def get(self, request):
-		serializer = UserSerializer(request.user)
-		return Response({'user': serializer.data}, status=status.HTTP_200_OK)
-
+class UserLoginView(APIView):
+    def post(self, request):
+        data = request.data
+        try:
+            validate_email(data)
+            validate_password(data)
+        except ValidationError as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = UserLoginSerializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.check_user(data)
+            login(request, user)
+            token_serializer = CustomTokenObtainPairSerializer()
+            refresh = token_serializer.get_token_for_user(user)
+            access_token = str(refresh.access_token)
+            response_data = {
+                'refresh': str(refresh),
+                'access': access_token,
+                'username': user.username,
+                **serializer.data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 ###### DATA 
 
