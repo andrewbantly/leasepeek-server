@@ -70,11 +70,12 @@ class UserLoginView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 ###### DATA 
-
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def process_excel_data(request):
 	user = request.user
-	if request.method == 'POST' and user.is_authenticated:
+	print(user)
+	if request.method == 'POST':
 		user_id = user.user_id
 		if 'file' in request.FILES:
 			file_obj = request.FILES['file']
@@ -90,7 +91,8 @@ def process_excel_data(request):
 			return JsonResponse({"message": "No file attached."})
 	return JsonResponse({"message": "Invalid request method."})
 
-@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def read_user_data(request):
     user_id = request.user.user_id
     cursor = data_collection.find({
