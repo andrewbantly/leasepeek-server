@@ -16,6 +16,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import ValidationError
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
+from leasepeek.readers.basic_data_functions.get_basic_data import find_basic_data
 
 class CustomTokenObtainPairView(TokenObtainPairView):
 	serializer_class = CustomTokenObtainPairSerializer
@@ -94,21 +95,14 @@ def process_excel_data(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def read_user_data(request):
-    user_id = request.user.user_id
-    cursor = data_collection.find({
-        'user_id': user_id
-    }, {'location': 1, 'date': 1})
-
-    buildings_and_dates = [{
-		'location': doc.get('location'), 
-		'date': doc.get('date'),
-		'objectId': str(doc.get('_id'))
-		} for doc in cursor]
-
-    return JsonResponse({"data": buildings_and_dates, "message": "Request for user building and date data received."})
+	user_id = request.user.user_id
+	cursor = data_collection.find({'user_id': user_id})
+	basic_data = find_basic_data(cursor)
+	return JsonResponse({"data": basic_data, "message": "Request for basic building data received."})
 
 
-@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def read_excel_data(request):
 	user = request.user
 	object_id = request.GET.get('id', None)
