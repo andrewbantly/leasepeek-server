@@ -1,10 +1,3 @@
-            # 'unit': None,
-            # 'floorplan': None,
-            # 'sqft': None,
-            # 'market': None,
-            # 'tenant': None,
-            # 'unclassified': {}
-
 def find_basic_data(cursor):
     basic_data_list = []
     for doc in cursor:
@@ -32,6 +25,5 @@ def find_basic_data(cursor):
             'vacants': vacants,
             'floorplans': floor_plans,
         }
-        print(basic_data)
         basic_data_list.append(basic_data)
     return basic_data_list

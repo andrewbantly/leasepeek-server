@@ -26,7 +26,7 @@ def read_xlsx(data_frame, user_id):
                  'location': property,
                  'asOf': as_of_date,
                  'data': cleaned_unit_data
-                 }
+                 }          
     
 
     return unit_data
