@@ -27,9 +27,11 @@ def find_basic_data(cursor):
             'objectId': str(doc.get('_id')),
             'location': doc.get('location', None),
             'date': doc.get('date', None),
+            'asOf': doc.get('asOf', None),
             'totalUnits': total_units,
             'vacants': vacants,
             'floorplans': floor_plans,
         }
+        print(basic_data)
         basic_data_list.append(basic_data)
     return basic_data_list
