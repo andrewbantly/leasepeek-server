@@ -63,6 +63,7 @@ def process_unit_data(df, data_types):
                     current_unit[charge_line] = charge_amount
                     charge_line = ""
                     charge_amount = 0
+
     data.append(current_unit) 
 
     return data

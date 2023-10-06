@@ -75,7 +75,6 @@ class UserLoginView(APIView):
 @permission_classes([IsAuthenticated])
 def process_excel_data(request):
 	user = request.user
-	print(user)
 	if request.method == 'POST':
 		user_id = user.user_id
 		if 'file' in request.FILES:
