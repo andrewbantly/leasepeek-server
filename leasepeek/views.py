@@ -82,8 +82,8 @@ def process_excel_data(request):
 			try:
 				data_frame = pd.read_excel(file_obj, header=None)
 				unit_data = read_xlsx(data_frame, user_id)
-				# result = data_collection.insert_one(unit_data)
-				# return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
+				result = data_collection.insert_one(unit_data)
+				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
 				return JsonResponse({"message": "Error processing excel file."})
@@ -103,14 +103,14 @@ def read_user_data(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def read_excel_data(request):
-	user = request.user
-	object_id = request.GET.get('id', None)
-	if request.method == 'GET' and user.is_authenticated:
-		user_id = user.user_id
-		cursor = data_collection.find({
-			'user_id': user_id,
-			'_id': ObjectId(object_id)
-		})
-		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
-		return JsonResponse(results, safe=False)
-	return JsonResponse({"message": "Invalid request method."})
+	user = request.user.user_id
+	object_id = request.GET.get('objectId', None)
+	print("### User:", user)
+	print("### Object ID:", object_id)
+
+	cursor = data_collection.find({
+		'user_id': user,
+		'_id': ObjectId(object_id)
+	})
+	results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
+	return JsonResponse(results, safe=False)
