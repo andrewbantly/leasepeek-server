@@ -4,6 +4,7 @@ from leasepeek.readers.reader_functions.unit_data_types import find_unit_data_ty
 from leasepeek.readers.reader_functions.process_unit_data import process_unit_data
 from leasepeek.readers.reader_functions.clean_unit_data import clean_unit_data
 from leasepeek.readers.reader_functions.report_generators.vacancy import vacancy
+from leasepeek.readers.reader_functions.report_generators.market_value_per_floorplan import market_value_per_floorplan
 from datetime import datetime, timezone
 
 def read_xlsx(data_frame, user_id):
@@ -25,10 +26,15 @@ def read_xlsx(data_frame, user_id):
     # Vacancy report
     vacancy_data = vacancy(cleaned_unit_data)
 
+    # Average Market Value per Floorplan report
+    avg_market_per_floorplan = market_value_per_floorplan(cleaned_unit_data)
+
+
     unit_data = {'user_id': user_id,
                  'date': datetime.now(timezone.utc).isoformat(),
                  'location': property,
                  'asOf': as_of_date,
+                 'vacancy': vacancy_data,
                  'data': cleaned_unit_data
                  }          
     

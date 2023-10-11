@@ -24,4 +24,5 @@ def vacancy(unit_data):
         occupied = total_units - vacants
         vacancy_data = {"Vacant": vacants, "Occupied": occupied}
 
+    print(vacancy_data)
     return vacancy_data
