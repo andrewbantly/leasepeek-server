@@ -4,15 +4,15 @@ from leasepeek.readers.reader_functions.unit_data_types import find_unit_data_ty
 from leasepeek.readers.reader_functions.process_unit_data import process_unit_data
 from leasepeek.readers.reader_functions.clean_unit_data import clean_unit_data
 from leasepeek.readers.reader_functions.report_generators.vacancy import vacancy
-from leasepeek.readers.reader_functions.report_generators.market_value_per_floorplan import market_value_per_floorplan
+from leasepeek.readers.reader_functions.report_generators.floorplan_survey import floorplan_survey
 from datetime import datetime, timezone
 
-def read_xlsx(data_frame, user_id):
+def read_xlsx(data_frame, user_id, file_name):
     # Find the name of the property
     property = find_property_name(data_frame)
 
     # Find the 'as of' date
-    as_of_date = find_as_of_date(data_frame)
+    as_of_date = find_as_of_date(data_frame, file_name)
 
     # Find the different types of data
     unit_data_types = find_unit_data_types(data_frame)
@@ -27,16 +27,15 @@ def read_xlsx(data_frame, user_id):
     vacancy_data = vacancy(cleaned_unit_data)
 
     # Average Market Value per Floorplan report
-    avg_market_per_floorplan = market_value_per_floorplan(cleaned_unit_data)
-    
-
+    surveyed_floorplans = floorplan_survey(cleaned_unit_data)
 
     unit_data = {'user_id': user_id,
                  'date': datetime.now(timezone.utc).isoformat(),
                  'location': property,
                  'asOf': as_of_date,
                  'vacancy': vacancy_data,
-                 'data': cleaned_unit_data
+                 'floorplan': surveyed_floorplans,
+                #  'data': cleaned_unit_data
                  }          
     
 

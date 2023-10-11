@@ -16,7 +16,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.core.exceptions import ValidationError
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
-from leasepeek.readers.basic_data_functions.get_basic_data import find_basic_data
+# from leasepeek.readers.basic_data_functions.get_basic_data import find_basic_data
 
 class CustomTokenObtainPairView(TokenObtainPairView):
 	serializer_class = CustomTokenObtainPairSerializer
@@ -79,12 +79,12 @@ def process_excel_data(request):
 		user_id = user.user_id
 		if 'file' in request.FILES:
 			file_obj = request.FILES['file']
+			file_name = file_obj.name
 			try:
 				data_frame = pd.read_excel(file_obj, header=None)
-				unit_data = read_xlsx(data_frame, user_id)
-				# result = data_collection.insert_one(unit_data)
-				# return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
-				return JsonResponse({"message": "Temp return message."})
+				unit_data = read_xlsx(data_frame, user_id, file_name)
+				result = data_collection.insert_one(unit_data)
+				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
 				return JsonResponse({"message": "Error processing excel file."})
@@ -97,8 +97,9 @@ def process_excel_data(request):
 def read_user_data(request):
 	user_id = request.user.user_id
 	cursor = data_collection.find({'user_id': user_id})
-	basic_data = find_basic_data(cursor)
-	return JsonResponse({"data": basic_data, "message": "Request for basic building data received."})
+	basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplan']
+	results = [{k: item[k] for k in basic_data if k in item} for item in cursor]
+	return JsonResponse({"data": results, "message": "Request for basic building data received."})
 
 
 @api_view(['GET'])

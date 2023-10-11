@@ -1,4 +1,4 @@
-def market_value_per_floorplan(data):
+def floorplan_survey(data):
     # Initialize floor plans dictionary that will be returned 
     floorplans = {}
 
