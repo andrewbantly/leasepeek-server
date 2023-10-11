@@ -34,7 +34,7 @@ def read_xlsx(data_frame, user_id, file_name):
                  'location': property,
                  'asOf': as_of_date,
                  'vacancy': vacancy_data,
-                 'floorplan': surveyed_floorplans,
+                 'floorplans': surveyed_floorplans,
                 #  'data': cleaned_unit_data
                  }          
     
