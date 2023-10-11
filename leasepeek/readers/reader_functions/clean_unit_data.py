@@ -101,15 +101,18 @@ def clean_unit_data(data_array):
                 if isinstance(value, str):
                     value = value.replace('*', '').replace(',', '').strip()
                     try:
-                        value = float(value)
+                        value = int(round(float(value)))
                     except ValueError:
                         print(f"Error converting '{value}' to integer for key '{key}'. Using raw value.")
-                cleaned_entry[category] = value
+                if value == '':
+                    cleaned_entry[category] = 0
+                else:
+                    cleaned_entry[category] = value
             elif category == 'charges':
                 if isinstance(value, str):
                     value = value.replace('*', '').replace(',','').strip()
                     try:
-                        value = float(value)
+                        value = int(round(float(value)))
                     except ValueError:
                         print(f"Error converting '{value}' to integer for key '{key}'. Using raw value.")
                 if key in negative_charge_codes:
@@ -124,22 +127,4 @@ def clean_unit_data(data_array):
                 cleaned_entry['unclassified'][key] = value
 
         cleaned_data.append(cleaned_entry)
-    print("### CLEAN DATA")
-    print(cleaned_data[len(data_array) -1])
-    print("")
-    # fix_data = []
-    # for c in cleaned_data:
-    #     if c['unclassified'] != {}:
-    #         a = c['unclassified']
-    #         if a not in fix_data:
-    #             fix_data.append(a)
-    # unique_charge_codes = set()  # Using a set ensures uniqueness
-
-    # for c in cleaned_data:
-    #     if 'unclassified' in c:
-    #         for key in c['unclassified'].keys():
-    #             if key not in ["Notice", "Net Change In Balance"]:
-    #                 unique_charge_codes.add(key)
-    # print("### MISSING CHARGE CODES")
-    # print(unique_charge_codes)
     return cleaned_data

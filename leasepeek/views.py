@@ -82,8 +82,9 @@ def process_excel_data(request):
 			try:
 				data_frame = pd.read_excel(file_obj, header=None)
 				unit_data = read_xlsx(data_frame, user_id)
-				result = data_collection.insert_one(unit_data)
-				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
+				# result = data_collection.insert_one(unit_data)
+				# return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
+				return JsonResponse({"message": "Temp return message."})
 			except Exception as e:
 				print(f"Error processing excel file: {e}")
 				return JsonResponse({"message": "Error processing excel file."})
