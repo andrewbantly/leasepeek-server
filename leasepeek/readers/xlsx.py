@@ -28,6 +28,7 @@ def read_xlsx(data_frame, user_id):
 
     # Average Market Value per Floorplan report
     avg_market_per_floorplan = market_value_per_floorplan(cleaned_unit_data)
+    
 
 
     unit_data = {'user_id': user_id,
