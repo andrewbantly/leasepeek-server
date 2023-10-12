@@ -8,7 +8,6 @@ charge_types = ['Charge Code', 'Amount', 'Rent Charge Description', 'Rent Charge
 unit_describers = ['Bldg/Unit', "Unit", "Unit Number", ]
 
 def process_unit_data(df, data_types):
-    print("Title Row", data_types['Title Row'])
     data_starting_row = data_types["Title Row"] + 1
     data_types.pop("Title Row")
 

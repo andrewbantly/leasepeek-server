@@ -76,7 +76,7 @@ def clean_unit_data(data_array):
             'floorplan': None,
             'sqft': None,
             'market': None,
-            'rent': None,
+            'rent': 0,
             'status': None,
             'tenant': None,
             'residentId': None,
@@ -127,4 +127,5 @@ def clean_unit_data(data_array):
                 cleaned_entry['unclassified'][key] = value
 
         cleaned_data.append(cleaned_entry)
+
     return cleaned_data
