@@ -2,16 +2,15 @@ import re
 
 date_patterns = [r'\d{1,2}/\d{1,2}/\d{4}', r'\d{1,2}/\d{4}']
 
-def find_as_of_date(df, file_name):
+def find_as_of_date(df, file_name, title_row):
 
     # Look for 'as of' date inside of dataframe (excel data)
-    for i, row in df.head(10).iterrows(): 
+    for i, row in df.head(title_row).iterrows(): 
         row_str = ' '.join(row.dropna().astype(str))
         for pattern in date_patterns:
             match = re.search(pattern, row_str)
             if match:
                 found_date = match.group(0)
-                print("Date found:", found_date)
                 return found_date
     
     # If no as of date is in excel file, look for it in the file name
@@ -31,9 +30,7 @@ def find_as_of_date(df, file_name):
         parts[0] = parts[0].zfill(2)
         parts[1] = parts[1].zfill(2)
         found_date = '/'.join(parts)
-        print("Date found:", found_date)
         return found_date
 
     # If there is no date in the excel file or file name, return "date not found" 
-    print("Date not found!")
     return "Date not found"

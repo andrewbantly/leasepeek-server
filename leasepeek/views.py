@@ -95,11 +95,17 @@ def process_excel_data(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def read_user_data(request):
-	user_id = request.user.user_id
-	cursor = data_collection.find({'user_id': user_id})
-	basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans']
-	results = [{k: item[k] for k in basic_data if k in item} for item in cursor]
-	return JsonResponse({"data": results, "message": "Request for basic building data received."})
+    user_id = request.user.user_id
+    cursor = data_collection.find({'user_id': user_id})
+    basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits']
+    results = []
+    for item in cursor:
+        data = {k: item[k] for k in basic_data if k in item}
+        data['objectId'] = str(item['_id'])
+        results.append(data)
+    
+    return JsonResponse({"data": results, "message": "Request for basic building data received."})
+
 
 
 @api_view(['GET'])

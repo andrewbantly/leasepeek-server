@@ -20,5 +20,4 @@ def floorplan_survey(data):
         avg_market = round(sum(floorplans[plan]) / plan_count, 2)
         floorplans[plan] = {'sum': market_sum, 'count': plan_count, 'average': avg_market}
     
-    print(floorplans)
     return floorplans
