@@ -75,7 +75,7 @@ def clean_unit_data(data_array):
             'address': None,
             'floorplan': None,
             'sqft': None,
-            'market': None,
+            'market': 0,
             'rent': 0,
             'status': None,
             'tenant': None,
