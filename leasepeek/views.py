@@ -113,12 +113,16 @@ def read_user_data(request):
 def read_excel_data(request):
 	user = request.user.user_id
 	object_id = request.GET.get('objectId', None)
-	print("### User:", user)
-	print("### Object ID:", object_id)
-
 	cursor = data_collection.find({
 		'user_id': user,
 		'_id': ObjectId(object_id)
 	})
 	results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
 	return JsonResponse(results, safe=False)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_property(request):
+	object_id = request.GET.get('objectId', None)
+	data_collection.delete_one({"_id": ObjectId(object_id)})
+	return JsonResponse({"message": "Property data deleted."})
