@@ -5,7 +5,7 @@ keywords = {'Unit Type', 'Floorplan', 'Unit Sq Ft', 'Name', 'Market Rent', 'Char
 
 def find_unit_data_types(df):
     """
-    Parses the input dataframe to identify and map column titles based on pre-defined keywords.
+    Parses the input dataframe to identify and map column titles based on pre-defined keywords. Even though the size of the keyword list is not massive, the performance of a keyword search using a set is generally O(1).
 
     The function checks the first 15 rows of the dataframe, assuming that column titles
     could be spread across multiple rows. If column titles are found in two consecutive rows, 
