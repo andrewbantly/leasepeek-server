@@ -68,5 +68,5 @@ def find_as_of_date(df, title_row, file_name):
         found_date = '/'.join(parts)
         return found_date
 
-    # Return a default message if no date is found
+    # Return a "Date not found" if no date is found
     return "Date not found"
