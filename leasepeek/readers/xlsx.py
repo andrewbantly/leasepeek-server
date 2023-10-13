@@ -49,7 +49,7 @@ def read_xlsx(data_frame, user_id, file_name):
     property = find_property_name(data_frame, title_row)
 
     # Determine the 'as of' date either from the data or the file name
-    as_of_date = find_as_of_date(data_frame, file_name, title_row)
+    as_of_date = find_as_of_date(data_frame, title_row, file_name)
 
     # Process and structure the raw unit data from the Excel sheet
     processed_unit_data = process_unit_data(data_frame, unit_data_types)
