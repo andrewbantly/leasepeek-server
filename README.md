@@ -10,4 +10,4 @@ The backend of this application is engineered to efficiently process and parse d
 
 ### Framework: Django
 
-**Rational:** Django offers a smoother experience despite its lack of native support for NoSQL databases like MongoDB. Its streamlined handling of file uploads, efficiency in creating APIs via the Django Rest Framework, and a ready-to-use admin interface outweigh this limitation. These features accelerate development and enhance application management, making Django ideal for our needs. To mitigate database compatibility issues, we're utilizing connectors to integrate MongoDB effectively, ensuring a seamless operation.
+**Rationale:** Django offers a smoother experience despite its lack of native support for NoSQL databases like MongoDB. Its streamlined handling of file uploads, efficiency in creating APIs via the Django Rest Framework, and a ready-to-use admin interface outweigh this limitation. These features accelerate development and enhance application management, making Django ideal for our needs. To mitigate database compatibility issues, we're utilizing connectors to integrate MongoDB effectively, ensuring a seamless operation.
