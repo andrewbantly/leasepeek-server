@@ -1,7 +1,9 @@
 ### [Link to Client Repository](https://github.com/andrewbantly/leasepeek)
 ### Objective
 The backend of this application is engineered to efficiently process and parse data from uploaded Excel files (.xlsx), systematically save this data to a database, and expose a structured data API. It must generate and return JWTs for secured user sessions. Additionally, the backend will manage user data, incorporating password hashing and encryption, and handle user authorization and authentication processes.
+
 ### Programming language: Python
+**Rationale:**: Python was chosen for the backend due to its readability, simplicity, and extensive suite of libraries that streamline the development process. The language's libraries, such as pandas, are instrumental in processing the Excel data. Furthermore, Python's PyMongo connector simplifies interactions with our MongoDB database, enabling efficient data operations. These capabilities make Python the fitting choice for an efficient and manageable backend development experience.
 
 ### Databases:
 **MongoDB:**  Using a flexible, schema-less, JSON-style, document-based database is preferred for the property information because of the unknown nature of the excel data. Being able to create unique field and value pairs will efficiently scale and mitigate any issues of duplicate or new charge fields. 
