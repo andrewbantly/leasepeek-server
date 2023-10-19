@@ -1,18 +1,15 @@
 """
-URL configuration for leasepeek_backend project.
+URL Configuration for the leasepeek_backend Django project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+This module defines the URL patterns for the leasepeek_backend project, effectively routing various URLs to their corresponding views or including additional URL configurations from different apps within the project.
+
+The `urlpatterns` list is used to store all the URL patterns for the application.
+
+Detailed URL routing:
+- 'admin/': Default URL route for Django's admin site.
+- 'user/': URL configuration from 'leasepeek.urls.user_urls', which handles user-specific operations.
+- 'data/': URL configuration from 'leasepeek.urls.data_urls',  dealing with operations related to CRUD data processing.
+- 'auth/': URL configuration from 'leasepeek.urls.auth_urls', handling authentication and authorization.
 """
 from django.contrib import admin
 from django.urls import path, include
