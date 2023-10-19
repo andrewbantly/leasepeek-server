@@ -110,7 +110,6 @@ def process_excel_data(request):
 			unit_data = read_xlsx(data_frame, user_id, file_name)
 			result = data_collection.insert_one(unit_data)
 			return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
-			return JsonResponse({'message': 'Processed'})
 		except Exception as e:
 			print(f"Error processing excel file: {e}")
 			return JsonResponse({"message": "Error processing excel file."})
