@@ -11,6 +11,8 @@ Functions:
 Variables:
     combined_vacancy_keywords: Set of keywords used to identify units with non-explicit statuses that require further classification.
 """
+
+# Set of keywords used to identify units with non-explicit statuses that require further classification.
 combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
 
 def vacancy(unit_data):
