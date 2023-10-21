@@ -1,57 +1,91 @@
+"""
+Vacancy Analysis Module
 
-vague_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
+This module is designed to analyze a rental property's vacancy. The expected input is a list of dictionaries, each representing a rental unit's data extracted from a pre-processed Excel dataset.
 
+The module identifies vacancy status based on predefined keywords and categorizes units accordingly. It distinguishes between non-explicit statuses by investigating related fields such as 'tenant' and 'moveOut' information. 
+
+Functions:
+    vacancy(unit_data): Analyzes and categorizes the vacancy status of units from the provided list.
+
+Variables:
+    combined_vacancy_keywords: Set of keywords used to identify units with non-explicit statuses that require further classification.
+"""
+combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
 
 def vacancy(unit_data):
+    """
+    Analyze and categorize the vacancy status of units.
+
+    This function processes a list of unit data dictionaries, categorizing each unit's vacancy status based on specific criteria. For units with explicit statuses, it increments the count of their respective status in a report dictionary.
     
-    # Initialize tenant status report that will be used if unit data includes a tenant status
-    tenant_status_report = {}
+    For units with non-explicit statuses, it determines their status based on additional information (e.g., 'tenant', 'moveOut') and updates the report.
     
-    # If unit data doesn't include tenant status, we are going to count how many times 'vacant' appears in the tenant column
+    If unit data lacks status information, the function counts the number of 'vacant' occurrences in the 'tenant' field.
+
+    Args:
+    unit_data (list): A list of dictionaries, each containing data about a rental unit.
+
+    Returns:
+    dict: A dictionary summarizing the number of units in each vacancy status category.
+    """
+    
+    # Initialize a dictionary to hold counts of units per vacancy status.
+    vacancy_statuses = {}
+    
+    # Counter for units explicitly marked as 'vacant'.
     vacants = 0
+    # Total number of units in the dataset.
     total_units = len(unit_data)
 
+    # Process each unit's data.
     for unit in unit_data:
-        if unit['status'] in vague_keywords:
+        # Handle units with combined statuses that require further classification.
+        if unit['status'] in combined_vacancy_keywords:
+            # If the status indicates future residents or applicants, increment the 'Applicant' count.
             if unit['status'] ==  "Future Residents/Applicants":
-                if 'Applicant' in tenant_status_report:
-                    tenant_status_report['Applicant'] += 1
+                if 'Applicant' in vacancy_statuses:
+                    vacancy_statuses['Applicant'] += 1
                 else:
-                    tenant_status_report['Applicant'] = 1
+                    vacancy_statuses['Applicant'] = 1
             else:
+                # If the tenant field contains 'vacant', increment the 'Vacant' count.
                 if 'vacant' in unit['tenant'].lower():
-                    print('add to vacant')
-                    if 'Vacant' in tenant_status_report:
-                        tenant_status_report['Vacant'] += 1
+                    if 'Vacant' in vacancy_statuses:
+                        vacancy_statuses['Vacant'] += 1
                     else:
-                        tenant_status_report['Vacant'] = 1
+                        vacancy_statuses['Vacant'] = 1
+                # If there's a move-out date, increment the 'Notice' count (indicating upcoming vacancy).
                 elif unit['moveOut']:
-                    print('add to notice')
-                    if 'Notice' in tenant_status_report:
-                        tenant_status_report['Notice'] += 1
+                    if 'Notice' in vacancy_statuses:
+                        vacancy_statuses['Notice'] += 1
                     else:
-                        tenant_status_report['Notice'] = 1
+                        vacancy_statuses['Notice'] = 1
+                # If none of the above, the unit is considered 'Current' (occupied with no known upcoming vacancy).
                 else:
-                    print('add to current')
-                    if 'Current' in tenant_status_report:
-                        tenant_status_report['Current'] += 1
+                    if 'Current' in vacancy_statuses:
+                        vacancy_statuses['Current'] += 1
                     else:
-                        tenant_status_report['Current'] = 1
-
+                        vacancy_statuses['Current'] = 1
+        
+        # Handle units with explicit statuses.
         elif unit['status']: 
-            if unit['status'] in tenant_status_report:
-                tenant_status_report[unit['status']] += 1
+            # Increment the count for the unit's status.
+            if unit['status'] in vacancy_statuses:
+                vacancy_statuses[unit['status']] += 1
             else:
-                tenant_status_report[unit['status']] = 1
-                
+                vacancy_statuses[unit['status']] = 1
+
+        # For units without a status, check if 'vacant' is mentioned in the 'tenant' field.
         else:
             if 'vacant' in unit['tenant'].lower():
                 vacants += 1
 
-
-    if tenant_status_report:
-        vacancy_data = tenant_status_report
+    # Compile the final vacancy report.
+    if vacancy_statuses:
+        vacancy_data = vacancy_statuses
     else: 
+        # If there was no status data, report based on 'vacant' counts.
         occupied = total_units - vacants
         vacancy_data = {"Vacant": vacants, "Occupied": occupied}
 
