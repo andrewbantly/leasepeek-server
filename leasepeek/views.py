@@ -19,6 +19,10 @@ from .validations import custom_validation, validate_email, validate_password
 from leasepeek.readers.xlsx import read_xlsx
 from bson.objectid import ObjectId
 import pandas as pd
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Token Authentication
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -34,23 +38,39 @@ class RegisterUserView(APIView):
 	This view validates the provided data, then registers a new user and generates an access token for them.
 	"""
 	def post(self, request):
-		# Validate incoming user data
-		clean_data = custom_validation(request.data)
+		logger.info("Register User POST request initiated.")
+		try:
+			# Validate incoming user data
+			clean_data = custom_validation(request.data)
 
-		# Serialize the cleaned data for user registration
-		serializer = UserRegisterSerializer(data=clean_data)
+		 	# If validation is successful, log the event.
+			logger.info("User data validated successfully.")
 
-		# If the serialized data is valid, create a user and generate tokens
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.create(clean_data)
-			if user:
-				token_serializer = CustomTokenObtainPairSerializer()
-				refresh = token_serializer.get_token_for_user(user)
-				return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                **serializer.data
-            }, status=status.HTTP_201_CREATED)
+			# Serialize the cleaned data for user registration
+			serializer = UserRegisterSerializer(data=clean_data)
+
+			# If the serialized data is valid, create a user and generate tokens
+			if serializer.is_valid(raise_exception=True):
+				user = serializer.create(clean_data)
+				# Event log
+				logger.info(f"User created successfully: {user.username}")
+				if user:
+					token_serializer = CustomTokenObtainPairSerializer()
+					refresh = token_serializer.get_token_for_user(user)
+					return Response({
+					'refresh': str(refresh),
+					'access': str(refresh.access_token),
+					**serializer.data
+				}, status=status.HTTP_201_CREATED)
+		except ValidationError as e:
+			logger.warning(f"Validation error during user registration: {e}")
+			return Response({'detail': e.messages}, status=status.HTTP_400_BAD_REQUEST)		
+		
+		except Exception as e:
+            # Log any other exceptions that occur.
+			logger.error(f"An unexpected error occurred: {e}", exc_info=True)
+			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 		return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
