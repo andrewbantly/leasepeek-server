@@ -12,6 +12,7 @@ Functions:
 
 from django.core.exceptions import ValidationError  
 from django.contrib.auth import get_user_model  
+from django.core.validators import validate_email as validate_email_format
 
 # Getting the user model currently active
 UserModel = get_user_model()  
@@ -25,6 +26,13 @@ def custom_validation(data):
     email = data['email'].strip()  
     username = data['username'].strip()
     password = data['password'].strip()
+
+    # Validate email format
+    if email:
+        try:
+            validate_email_format(email)
+        except ValidationError:
+            raise ValidationError('Invalid email format')
 
     # Checking if the 'email' field is empty or if a user already exists with this email
     if not email or UserModel.objects.filter(email=email).exists():
@@ -52,6 +60,13 @@ def validate_email(data):
 
     # Stripping whitespace from the 'email' field in the input data
     email = data['email'].strip()
+
+    # Validate email format
+    if email:
+        try:
+            validate_email_format(email)
+        except ValidationError:
+            raise ValidationError('Invalid email format')
 
     # Raising a ValidationError if the email field is empty
     if not email:
