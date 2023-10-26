@@ -23,7 +23,7 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(user.username, self.user_data["username"])
         self.assertTrue(user.check_password(self.user_data["password"]))
-        # Here, you might also want to check the response data for the tokens and ensure they're valid
+        # To do: check the response data for the tokens and ensure they're valid
 
     def test_register_user_existing_username(self):
         """
@@ -32,7 +32,8 @@ class RegisterUserViewTest(APITestCase):
         self.User.objects.create_user(**self.user_data)
         response = self.client.post(self.register_url, self.user_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(json.loads(response.content), {'detail': ['Choose another email.']})  # Make sure this matches the error structure you're returning
+        self.assertEqual(json.loads(response.content), {'detail': ['Choose another email.']})  
+        # Make sure this matches the error structure you're returning
 
 
-    # You can add more methods here to test other failure cases (e.g., invalid email, short password, etc.)
+    # Add more methods here to test other failure cases (e.g., invalid email, short password, etc.)
