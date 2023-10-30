@@ -21,8 +21,10 @@ class LoginUserViewTest(APITestCase):
             'email': 'testlogin@test.com',
             'password': 'testpassword123'
         }
+        # Getting the user model
         self.User = get_user_model()
 
+    # Register our test user
     def create_test_user(self):
         """
         Helper method to create a new user.
