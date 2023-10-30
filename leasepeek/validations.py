@@ -44,10 +44,10 @@ def custom_validation(data):
         # Raising a ValidationError if the password is invalid
         raise ValidationError('Choose another password, min 8 characters.')  
 
-    # Checking if the 'username' field is empty
-    if not username:
+    # Checking if the 'username' field is empty or already exists
+    if not username or UserModel.objects.filter(username=username).exists():
         # Raising a ValidationError if the username is invalid
-        raise ValidationError('choose another username')  
+        raise ValidationError('Choose another username.')  
 
     # Returning the data if it passes all the validation checks
     return data  
