@@ -6,10 +6,6 @@ from django.contrib.auth import get_user_model
 import json
 import jwt
 from rest_framework_simplejwt.tokens import AccessToken
-import logging
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 # Create a test case class for the User Registration View
 class RegisterUserViewTest(APITestCase):
@@ -63,8 +59,6 @@ class RegisterUserViewTest(APITestCase):
 
             # Username claim check
             self.assertEqual(access_token_obj['username'], user.username, "Token's username does not match the created user's username") 
-
-            logger.info(f"User {user.username} verified through JWT Access Token.")
 
         except jwt.ExpiredSignatureError:
             self.fail("Access token is expired")
