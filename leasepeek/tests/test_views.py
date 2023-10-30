@@ -4,6 +4,12 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 import json
+import jwt
+from rest_framework_simplejwt.tokens import AccessToken
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Create a test case class for the User Registration View
 class RegisterUserViewTest(APITestCase):
@@ -43,7 +49,28 @@ class RegisterUserViewTest(APITestCase):
         # Ensure the password for the user matches the one provided. The check_password method is used as passwords are stored in a hashed format
         self.assertTrue(user.check_password(self.user_data["password"]))
 
-        # Future implementation: check if response contains authentication tokens and validate them
+        # Check if the access and refesh tokens are in the response
+        self.assertIn('refresh', response.data, "Refresh token not found in the response data")
+        self.assertIn('access', response.data, "Access token not found in the response data")
+
+       # Get the access token from the response data
+        access_token = response.data['access']
+
+        # Validate the access token. The verification and decoding is handled by the AccessToken class from django-rest-framework-simplejwt
+        try:
+            # Decode the access token
+            access_token_obj = AccessToken(access_token)
+
+            # Username claim check
+            self.assertEqual(access_token_obj['username'], user.username, "Token's username does not match the created user's username") 
+
+            logger.info(f"User {user.username} verified through JWT Access Token.")
+
+        except jwt.ExpiredSignatureError:
+            self.fail("Access token is expired")
+        except jwt.InvalidTokenError:
+            self.fail("Invalid access token")
+
 
     # Test case to check that registration fails if the username already exists
     def test_register_user_existing_username(self):
@@ -62,5 +89,6 @@ class RegisterUserViewTest(APITestCase):
         # Ensure the error message matches the expected error structure.
         self.assertEqual(json.loads(response.content), {'detail': ['Choose another email.']})
 
+    
     # More test cases can be added here to check for other edge cases 
     # e.g., registration with invalid email, short password, missing fields etc.
