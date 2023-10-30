@@ -1,4 +1,4 @@
-# Required libraries/modules for testing
+# Required libraries/modules for user registration testing
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -188,7 +188,3 @@ class RegisterUserViewTest(APITestCase):
 
         # Ensure the error message matches the expected error structure
         self.assertEqual(json.loads(response.content), {'detail': ['Choose another password, min 8 characters.']})
-
-
-    # More test cases can be added here to check for other edge cases 
-    # e.g., registration with invalid email, short password, missing fields etc.
