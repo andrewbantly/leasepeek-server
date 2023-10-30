@@ -12,7 +12,7 @@ class RegisterUserViewTest(APITestCase):
 
     # Set up the initial data and configurations needed for the tests
     def setUp(self):
-        # URL for the register endpoint, 'register' is the name of the URL pattern
+        # URL for the register endpoint
         self.register_url = reverse('register')
 
         # Sample user data for testing
