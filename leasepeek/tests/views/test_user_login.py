@@ -79,3 +79,16 @@ class LoginUserViewTest(APITestCase):
         # Ensure the error message matches the expected error structure
         self.assertEqual(json.loads(response.content), {'detail': 'user not found'})
 
+    def test_login_with_invalid_password(self):
+        # Modify the user data to include an invalid password
+        invalid_user = self.user_data.copy()
+        invalid_user['password'] = 'badpassword'
+
+        # Try and login a user with an invalid password
+        response = self.client.post(self.login_url, invalid_user, format='json')
+        
+        # The response should be a 400 status code indicating a bad request
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Ensure the error message matches the expectted error structure
+        self.assertEqual(json.loads(response.content), {'detail': 'user not found'})
