@@ -6,9 +6,6 @@ from django.contrib.auth import get_user_model
 import json
 import jwt
 from rest_framework_simplejwt.tokens import AccessToken
-import logging
-
-logger = logging.getLogger(__name__)
 
 # Create a test case class for the User Login View
 class LoginUserViewTest(APITestCase):
