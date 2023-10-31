@@ -64,7 +64,7 @@ class RegisterUserView(APIView):
 				}, status=status.HTTP_201_CREATED)
 		except ValidationError as e:
 			logger.warning(f"Validation error during user registration: {e}")
-			return Response({'detail': e.messages}, status=status.HTTP_400_BAD_REQUEST)		
+			return Response({'detail': e.message}, status=status.HTTP_400_BAD_REQUEST)		
 		
 		except Exception as e:
             # Log any other exceptions that occur.
@@ -88,32 +88,32 @@ class UserLoginView(APIView):
 			validate_password(data)
 			logger.info("Login User data validated.")
 
+		
+			# Serialize and check user login credentials
+			serializer = UserLoginSerializer(data=data)
+			if serializer.is_valid(raise_exception=True):
+				user = serializer.check_user(data)
+				login(request, user)
+				logger.info(f"User login successful: {user.username}")
+				# Generate tokens for the logged-in user
+				token_serializer = CustomTokenObtainPairSerializer()
+				refresh = token_serializer.get_token_for_user(user)
+				access_token = str(refresh.access_token)
+				response_data = {
+					'refresh': str(refresh),
+					'access': access_token,
+					'username': user.username,
+					**serializer.data
+				}
+				return Response(response_data, status=status.HTTP_200_OK)
 		except ValidationError as e:
-			logger.warning(f"Validation error during user registration: {e}")
-			return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+			logger.warning(f"Validation error during user login: {e}")
+			return Response({'detail': e.message}, status=status.HTTP_400_BAD_REQUEST)
 		
 		except Exception as e:
             # Log any other exceptions that occur.
 			logger.error(f"An unexpected error occurred: {e}", exc_info=True)
 			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-		
-		# Serialize and check user login credentials
-		serializer = UserLoginSerializer(data=data)
-		if serializer.is_valid(raise_exception=True):
-			user = serializer.check_user(data)
-			login(request, user)
-			logger.info(f"User login successful: {user.username}")
-			# Generate tokens for the logged-in user
-			token_serializer = CustomTokenObtainPairSerializer()
-			refresh = token_serializer.get_token_for_user(user)
-			access_token = str(refresh.access_token)
-			response_data = {
-                'refresh': str(refresh),
-                'access': access_token,
-                'username': user.username,
-                **serializer.data
-            }
-			return Response(response_data, status=status.HTTP_200_OK)
 		return Response(status=status.HTTP_400_BAD_REQUEST)
 
 ##### DATA

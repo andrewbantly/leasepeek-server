@@ -85,7 +85,7 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Ensure the error message matches the expected error structure.
-        self.assertEqual(json.loads(response.content), {'detail': ['Choose another username.']})
+        self.assertEqual(json.loads(response.content), {'detail': 'Choose another username.'})
 
     def test_register_user_no_username(self):
         """
@@ -105,7 +105,7 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Ensure the error message matches the expected error structure
-        self.assertEqual(json.loads(response.content), {'detail': ['Choose another username.']})
+        self.assertEqual(json.loads(response.content), {'detail': 'Choose another username.'})
 
     def test_register_user_existing_email(self):
         """
@@ -121,7 +121,7 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Ensure the error message matches the expected error structure
-        self.assertEqual(json.loads(response.content), {'detail': ['Choose another email.']})
+        self.assertEqual(json.loads(response.content), {'detail': 'Choose another email.'})
 
     def test_register_user_no_email(self):
         """
@@ -141,7 +141,7 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Ensure the error message matches the expected error structure
-        self.assertEqual(json.loads(response.content), {'detail': ['Choose another email.']})
+        self.assertEqual(json.loads(response.content), {'detail': 'Choose another email.'})
 
     def test_register_user_no_password(self):
         """
@@ -161,7 +161,7 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Ensure the error message matches the expected error structure
-        self.assertEqual(json.loads(response.content), {'detail': ['Choose another password, min 8 characters.']})
+        self.assertEqual(json.loads(response.content), {'detail': 'Choose another password, min 8 characters.'})
 
     def test_register_user_invalid_password(self):
         """
@@ -181,4 +181,4 @@ class RegisterUserViewTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Ensure the error message matches the expected error structure
-        self.assertEqual(json.loads(response.content), {'detail': ['Choose another password, min 8 characters.']})
+        self.assertEqual(json.loads(response.content), {'detail': 'Choose another password, min 8 characters.'})
