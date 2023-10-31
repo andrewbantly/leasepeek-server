@@ -44,7 +44,7 @@ class RegisterUserView(APIView):
 			clean_data = custom_validation(request.data)
 
 		 	# If validation is successful, log the event.
-			logger.info("User data validated successfully.")
+			logger.info("Register User data validated.")
 
 			# Serialize the cleaned data for user registration
 			serializer = UserRegisterSerializer(data=clean_data)
@@ -80,21 +80,29 @@ class UserLoginView(APIView):
 	This view validates the provided credentials, logs the user in, and generates an access token.
 	"""
 	def post(self, request):
+		logger.info("Login User POST request initiated.")
 		data = request.data
-		
-		# Validate user's email and password
 		try:
+			# Validate user's email and password
 			validate_email(data)
 			validate_password(data)
+			logger.info("Login User data validated.")
+
 		except ValidationError as e:
+			logger.warning(f"Validation error during user registration: {e}")
 			return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+		
+		except Exception as e:
+            # Log any other exceptions that occur.
+			logger.error(f"An unexpected error occurred: {e}", exc_info=True)
+			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 		
 		# Serialize and check user login credentials
 		serializer = UserLoginSerializer(data=data)
 		if serializer.is_valid(raise_exception=True):
 			user = serializer.check_user(data)
 			login(request, user)
-
+			logger.info(f"User login successful: {user.username}")
 			# Generate tokens for the logged-in user
 			token_serializer = CustomTokenObtainPairSerializer()
 			refresh = token_serializer.get_token_for_user(user)

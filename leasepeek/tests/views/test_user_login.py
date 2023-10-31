@@ -6,6 +6,9 @@ from django.contrib.auth import get_user_model
 import json
 import jwt
 from rest_framework_simplejwt.tokens import AccessToken
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Create a test case class for the User Login View
 class LoginUserViewTest(APITestCase):
@@ -24,19 +27,11 @@ class LoginUserViewTest(APITestCase):
         # Getting the user model
         self.User = get_user_model()
 
-    # Register our test user
-    def create_test_user(self):
-        """
-        Helper method to create a new user.
-        """
-        # Send a POST request to the register endpoint with the sample user data
-        response = self.client.post(self.register_url, self.user_data, format='json')
+        self.client.post(self.register_url, self.user_data, format='json')
 
-        # Check if the user has been created in the database using the provided email.
-        user = self.User.objects.filter(email=self.user_data["email"]).first()
-
-        # Ensure the response returns a 201 status code indicating successful creation
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # Check if the registered user's username matches the provided username
-        self.assertEqual(user.username, self.user_data["username"])
-        print("USER LOGIN TEST")
+    def test_login_with_valid_credentials(self):
+        response = self.client.post(self.login_url, {
+            'email': self.user_data['email'],
+            'password': self.user_data['password']
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
