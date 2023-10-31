@@ -22,11 +22,11 @@ class LoginUserViewTest(APITestCase):
             'password': 'testpassword123'
         }
 
-        # Create test login user
-        self.client.post(self.register_url, self.user_data, format='json')
-        
         # Getting the user model
         self.User = get_user_model()
+
+        # Create test login user
+        self.user = self.User.objects.create_user(username='testloginuser', email='testlogin@test.com', password='testpassword123')        
 
     # Test case to ensure user login is successful with valid data
     def test_login_with_valid_credentials(self):
