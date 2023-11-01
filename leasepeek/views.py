@@ -103,8 +103,8 @@ class UserLoginView(APIView):
 					'refresh': str(refresh),
 					'access': access_token,
 					'username': user.username,
-					**serializer.data
-				}
+					'email': user.email
+					}
 				return Response(response_data, status=status.HTTP_200_OK)
 		except ValidationError as e:
 			logger.warning(f"Validation error during user login: {e}")
