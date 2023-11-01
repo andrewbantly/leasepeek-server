@@ -8,9 +8,8 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 class ProcessDataViewTest(APITestCase):
-
     def setUp(self):
-        # establish the end point
+        # Establish required end points
         self.process_data_url = reverse('process_data')
         self.login_url = reverse('login')
 
