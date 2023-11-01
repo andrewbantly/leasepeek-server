@@ -1,5 +1,6 @@
 # Required libraries/modules for testing data process endpoint
 import os
+import json
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -56,6 +57,19 @@ class ProcessDataViewTest(APITestCase):
 
         # Check that the upload was successful
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # JSON Response Data
+        response_data = json.loads(response.content)
+
+        # Ensure the response message is present in the response
+        self.assertIn('message', response_data)
+        self.assertEqual(response_data['message'], "Excel file processed successfully.")
+
+        # Ensure the objectId is present in the response
+        self.assertIn('objectId', response_data)
+        # Ensure ObjectId is a string of 24 hex characters - typical of MongoDB ObjectIds
+        self.assertRegex(response_data['objectId'], '^[a-f0-9]{24}$')
+
     
     # Test invalid file type upload with valid credentials 
     def test_invalid_file_type(self):
