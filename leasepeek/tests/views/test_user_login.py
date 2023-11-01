@@ -39,15 +39,30 @@ class LoginUserViewTest(APITestCase):
         # Ensure the response returns a 200 status code indicating login successful
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        # Check if the user has been created in the database using the provided email.      
+        user = self.User.objects.filter(email=self.user_data["email"]).first()
+
+        # Ensure the login response includes username & email data
+        self.assertIn('username', response.data, "Username not found in the response data")
+        self.assertIn('email', response.data, "Email not found in the response data")
+
+        # Check if the registered user's username & email matches the provided username & email
+        self.assertEqual(user.username, self.user_data["username"])
+        self.assertEqual(user.email, self.user_data["email"])
+
+        # Check if the registered user's username & email matches the response username & email
+        self.assertEqual(self.user.username, response.data["username"])
+        self.assertEqual(self.user.email, response.data["email"])
+
+        # Ensure the response does not include a user's password
+        self.assertNotIn('password', response.data, "Password is found in the response data")
+
         # Check if the access and refesh tokens are in the response
         self.assertIn('refresh', response.data, "Refresh token not found in the response data")
         self.assertIn('access', response.data, "Access token not found in the response data")
 
         # Get the access token from the response data
         access_token = response.data['access']
-
-        # Check if the user has been created in the database using the provided email.      
-        user = self.User.objects.filter(email=self.user_data["email"]).first()
 
         # Validate the access token. The verification and decoding is handled by the AccessToken class from django-rest-framework-simplejwt
         try:
