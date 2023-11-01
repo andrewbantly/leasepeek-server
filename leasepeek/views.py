@@ -134,17 +134,22 @@ def process_excel_data(request):
 		file_name = file_obj.name
 		logger.info(f"Received file '{file_name}' for processing.")
 
-		# Process the attached file and store its data in MongoDB
-		try:
-			data_frame = pd.read_excel(file_obj, header=None)
-			unit_data = read_xlsx(data_frame, user_id, file_name)
-			result = data_collection.insert_one(unit_data)
-			logger.info(f"File '{file_name}' processed successfully.")
-			return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)}, status=status.HTTP_201_CREATED)
-		except Exception as e:
-			logger.error(f"Error processing excel file '{file_name}': {e}", exc_info=True)
-			return JsonResponse({"message": "Error processing excel file."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-	
+		# Check if file extension is xlsx
+		if file_name.endswith('.xlsx'):
+			# Process the attached file and store its data in MongoDB
+			try:
+				data_frame = pd.read_excel(file_obj, header=None)
+				unit_data = read_xlsx(data_frame, user_id, file_name)
+				result = data_collection.insert_one(unit_data)
+				logger.info(f"File '{file_name}' processed successfully.")
+				return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)}, status=status.HTTP_201_CREATED)
+			except Exception as e:
+				logger.error(f"Error processing excel file '{file_name}': {e}", exc_info=True)
+				return JsonResponse({"message": "Error processing excel file."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+		else:
+			logger.warning(f"Invalid file extension for file '{file_name}'.")
+			return JsonResponse({"message": "Invalid file type. Only .xlsx files are allowed."}, status=400)
+
 	logger.warning(f"User {request.user.username} made a process data request without a file.")
 	return JsonResponse({"message": "No file was included in the request."}, status=status.HTTP_400_BAD_REQUEST)
 
