@@ -65,9 +65,8 @@ class ProcessDataViewTest(APITestCase):
         self.assertIn('message', response_data)
         self.assertEqual(response_data['message'], "Excel file processed successfully.")
 
-        # Ensure the objectId is present in the response
+        # Ensure the objectId is present in the response and formatted correctly 
         self.assertIn('objectId', response_data)
-        # Ensure ObjectId is a string of 24 hex characters - typical of MongoDB ObjectIds
         self.assertRegex(response_data['objectId'], '^[a-f0-9]{24}$')
 
     
