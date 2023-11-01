@@ -39,8 +39,16 @@ class RegisterUserViewTest(APITestCase):
         # Ensure the response returns a 201 status code indicating successful creation
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        # Check if the registered user's username matches the provided username
+        # Check if the registered user's username & email matches the provided username & email
         self.assertEqual(user.username, self.user_data["username"])
+        self.assertEqual(user.email, self.user_data["email"])
+
+        # Check if the registered user's username & email matches the response username & email
+        self.assertEqual(user.username, response.data["username"])
+        self.assertEqual(user.email, response.data["email"])
+
+        # Ensure the password is not in the response
+        self.assertNotIn('password', response.data, "Password is found in the response data")
 
         # Ensure the password for the user matches the one provided. The check_password method is used as passwords are stored in a hashed format
         self.assertTrue(user.check_password(self.user_data["password"]))
