@@ -125,24 +125,28 @@ def process_excel_data(request):
 	View to process and store data from an Excel file.
 	This view reads the uploaded Excel file, convers it to a DataFrame, and then stores it in MongoDB.
 	"""
+	logger.info(f"User {request.user.username} initiated a process data POST request.")
 	user_id = request.user.user_id
 
 	# Check if file is attached to the request
 	if 'file' in request.FILES:
 		file_obj = request.FILES['file']
 		file_name = file_obj.name
+		logger.info(f"Received file '{file_name}' for processing.")
 
 		# Process the attached file and store its data in MongoDB
 		try:
 			data_frame = pd.read_excel(file_obj, header=None)
 			unit_data = read_xlsx(data_frame, user_id, file_name)
 			result = data_collection.insert_one(unit_data)
-			return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)})
+			logger.info(f"File '{file_name}' processed successfully.")
+			return JsonResponse({"message": "Excel file processed successfully.", "objectId": str(result.inserted_id)}, status=status.HTTP_201_CREATED)
 		except Exception as e:
-			print(f"Error processing excel file: {e}")
-			return JsonResponse({"message": "Error processing excel file."})
-
-	return JsonResponse({"message": "Invalid request method."})
+			logger.error(f"Error processing excel file '{file_name}': {e}", exc_info=True)
+			return JsonResponse({"message": "Error processing excel file."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+	
+	logger.warning(f"User {request.user.username} made a process data request without a file.")
+	return JsonResponse({"message": "No file was included in the request."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
