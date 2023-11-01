@@ -4,7 +4,6 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import AccessToken
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 class ProcessDataViewTest(APITestCase):
