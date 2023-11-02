@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from bson.objectid import ObjectId
 
 class ReadDataViewTest(APITestCase):
     def setUp(self):
@@ -65,4 +66,22 @@ class ReadDataViewTest(APITestCase):
         # Check that the data read was successful
         self.assertEqual(data_read_response.status_code, status.HTTP_200_OK)
 
+    # Test read data with invalid objectId
+    def test_read_data_invalid_objectId(self):
+        # An access token of a logged in user is required for the read data request
+        login_response = self.client.post(self.login_url, self.user_data_payload, format='json')
+        self.assertEqual(login_response.status_code, status.HTTP_200_OK)
+        access_token = login_response.data['access']
 
+        # A objectId of a MongoDB document is required for the read data request
+        objectId = "03544c995cef54d4495facb4"
+        
+        # Send read data GET request with valid objectId and access token 
+        data_read_response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {access_token}')
+
+        # Check that the data read was successful
+        self.assertEqual(data_read_response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+    # Tests to do
+        # test with invalid access token

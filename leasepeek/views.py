@@ -182,34 +182,34 @@ def read_excel_data(request):
 	"""
 	user = request.user.user_id
 	object_id = request.GET.get('objectId', None)
-
 	if object_id is None:
-		logger.error("No objectId provided for user: ", user)
+		logger.error("No objectId provided for user: %s", user)
 		return JsonResponse({"message": "No objectId provided."}, status=status.HTTP_400_BAD_REQUEST)
-	
 	try:
 		object_id = ObjectId(object_id)
 	except InvalidId as e:
-		logger.error("Invalid ObjectId:", object_id, str(e))
+		logger.error("Invalid ObjectId: %s", object_id)
 		return JsonResponse({"message": "Invalid objectId format."}, status=status.HTTP_400_BAD_REQUEST)
-	
 	try:	
 		cursor = data_collection.find({
 			'user_id': user,
 			'_id': ObjectId(object_id)
 		})
-		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
 
+		if not cursor:
+			logger.error("Invalid ObjectId: %s", object_id)
+			return JsonResponse({"message": "Data not found."}, status=status.HTTP_404_NOT_FOUND)
+
+		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
 		if not results:
-			logger.info("No data found for ObjectId:", object_id, "User ID:", user)
+			logger.error("No data found for ObjectId: %s", object_id)
 			return JsonResponse({"message": "Data not found."}, status=status.HTTP_404_NOT_FOUND)
 
 		logger.info("Data retrieved successfully")
 		return JsonResponse(results, safe=False, status=status.HTTP_200_OK)
-	
 	except Exception as e:
-		logger.error("Error retrieving data for ObjectId", object_id,str(e))
-		return JsonResponse({"message": "Error retrieving data."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+		logger.error("Error retrieving data for ObjectId: %s", object_id)
+	return JsonResponse({"message": "Error retrieving data."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
