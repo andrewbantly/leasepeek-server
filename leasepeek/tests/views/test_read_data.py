@@ -59,9 +59,10 @@ class ReadDataViewTest(APITestCase):
         response_data = json.loads(data_upload_response.content)
         objectId = response_data['objectId']
 
-        # Build GET request 
+        # Send read data GET request with valid objectId and access token 
         data_read_response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {access_token}')
 
+        # Check that the data read was successful
         self.assertEqual(data_read_response.status_code, status.HTTP_200_OK)
 
 
