@@ -106,5 +106,5 @@ class ReadDataViewTest(APITestCase):
         # Send read data GET request with valid objectId and invalid access token 
         data_read_response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {invalid_access_token}')
 
-        # Check that the data read was successful
+        # Check that the data read was unauthorized
         self.assertEqual(data_read_response.status_code, status.HTTP_401_UNAUTHORIZED)
