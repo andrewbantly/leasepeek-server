@@ -28,7 +28,8 @@ class ReadUserDataViewTest(APITestCase):
         login_response = self.client.post(self.login_url, self.user_data_payload, format='json')
         self.access_token = login_response.data['access']
 
-
+    # Test read user data with valid credentials
+    def test_read_user_data(self):
         # Construct the path to the test file
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         test_file_path = os.path.join(BASE_DIR, 'test_data', 'good_test_data.xlsx')
@@ -45,16 +46,13 @@ class ReadUserDataViewTest(APITestCase):
             )
         
         # Send process data POST request
-        data_upload_response = self.client.post(self.process_data_url, {'file': file}, format='multipart', HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        self.client.post(self.process_data_url, {'file': file}, format='multipart', HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
 
-        # Check that the upload was successful
-        self.assertEqual(data_upload_response.status_code, status.HTTP_201_CREATED)
-
-
-    # Test read user data with valid credentials
-    def test_read_user_data(self):
         response = self.client.get(self.read_user_data_url, HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_read_user_no_data(self):
+        response = self.client.get(self.read_user_data_url, HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
 
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
