@@ -159,18 +159,29 @@ def process_excel_data(request):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def read_user_data(request):
-	"""
-	View to retrieve basic building data for the authenticated user.
-	"""
-	user_id = request.user.user_id
-	cursor = data_collection.find({'user_id': user_id})
-	basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits']
-	results = []
-	for item in cursor:
-		data = {k: item[k] for k in basic_data if k in item}
-		data['objectId'] = str(item['_id'])
-		results.append(data)
-	return JsonResponse({"data": results, "message": "Request for basic building data received."})
+    """
+    View to retrieve basic building data for the authenticated user.
+    """
+    user_id = request.user.user_id
+    cursor = data_collection.find({'user_id': user_id})
+
+    # Check if cursor is empty
+    try:
+        first_document = next(cursor, None)
+        if first_document is None:
+            logger.warning("No data found for User ID: %s", user_id)
+            return Response({"data": [], "message": "No building data found."}, status=status.HTTP_404_NOT_FOUND)
+    except StopIteration:
+        logger.warning("No data found for User ID: %s", user_id)
+        return Response({"data": [], "message": "No building data found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # If there is at least one document, process the cursor
+    basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits']
+    results = [ {k: item[k] for k in basic_data if k in item} for item in cursor ]
+    for data in results:
+        data['objectId'] = str(first_document['_id'])
+    logger.info("Basic building data retrieved for User ID: %s", user_id)
+    return Response({"data": results, "message": "Basic building data successfully retrieved."}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -178,7 +189,7 @@ def read_user_data(request):
 @permission_classes([IsAuthenticated])
 def read_excel_data(request):
 	"""
-	View to retriee data from MongoDB based on an objectId.
+	View to retrieve data from MongoDB based on an objectId.
 	"""
 	user = request.user.user_id
 	object_id = request.GET.get('objectId', None)
