@@ -78,7 +78,7 @@ class ReadDataViewTest(APITestCase):
         # Send read data GET request with valid objectId and access token 
         data_read_response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {access_token}')
 
-        # Check that the data read was successful
+        # Check that the data read was unsuccessful
         self.assertEqual(data_read_response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_read_data_invalid_access_token(self):
