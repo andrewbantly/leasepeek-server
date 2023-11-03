@@ -159,29 +159,25 @@ def process_excel_data(request):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def read_user_data(request):
-    """
-    View to retrieve basic building data for the authenticated user.
-    """
-    user_id = request.user.user_id
-    cursor = data_collection.find({'user_id': user_id})
+	"""
+	View to retrieve basic building data for the authenticated user.
+	"""
+	user_id = request.user.user_id
+	cursor = data_collection.find({'user_id': user_id})
 
     # Check if cursor is empty
-    try:
-        first_document = next(cursor, None)
-        if first_document is None:
-            logger.warning("No data found for User ID: %s", user_id)
-            return Response({"data": [], "message": "No building data found."}, status=status.HTTP_404_NOT_FOUND)
-    except StopIteration:
-        logger.warning("No data found for User ID: %s", user_id)
-        return Response({"data": [], "message": "No building data found."}, status=status.HTTP_404_NOT_FOUND)
-
-    # If there is at least one document, process the cursor
-    basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits']
-    results = [ {k: item[k] for k in basic_data if k in item} for item in cursor ]
-    for data in results:
-        data['objectId'] = str(first_document['_id'])
-    logger.info("Basic building data retrieved for User ID: %s", user_id)
-    return Response({"data": results, "message": "Basic building data successfully retrieved."}, status=status.HTTP_200_OK)
+	first_document = next(cursor, None)
+	if first_document is None:
+		logger.warning("No data found for User ID: %s", user_id)
+		return Response({"data": [], "message": "No building data found."}, status=status.HTTP_404_NOT_FOUND)
+	else:
+		# If there is at least one document, process the cursor
+		basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits']
+		results = [ {k: item[k] for k in basic_data if k in item} for item in cursor ]
+		for data in results:
+			data['objectId'] = str(first_document['_id'])
+		logger.info("Basic building data retrieved for User ID: %s", user_id)
+		return Response({"data": results, "message": "Basic building data successfully retrieved."}, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -213,8 +209,8 @@ def read_excel_data(request):
 
 		results = [{k: v for k, v in item.items() if k != '_id'} for item in cursor]
 		if not results:
-			logger.error("No data found for ObjectId: %s", object_id)
-			return JsonResponse({"message": "Data not found."}, status=status.HTTP_404_NOT_FOUND)
+			logger.warning("No data found for ObjectId: %s", object_id)
+			return JsonResponse({"message": "Data not found."}, status=status.HTTP_204_NO_CONTENT)
 
 		logger.info("Data retrieved successfully")
 		return JsonResponse(results, safe=False, status=status.HTTP_200_OK)

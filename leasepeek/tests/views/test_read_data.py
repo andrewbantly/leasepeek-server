@@ -79,7 +79,7 @@ class ReadDataViewTest(APITestCase):
         data_read_response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {access_token}')
 
         # Check that the data read was successful
-        self.assertEqual(data_read_response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(data_read_response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_read_data_invalid_access_token(self):
         # A valid access token of a logged in user is required to add a MongoDB document object
