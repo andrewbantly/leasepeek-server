@@ -82,6 +82,29 @@ class ReadDataViewTest(APITestCase):
         # Check that the data read was successful
         self.assertEqual(data_read_response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_read_data_invalid_access_token(self):
+        # A valid access token of a logged in user is required to add a MongoDB document object
+        login_response = self.client.post(self.login_url, self.user_data_payload, format='json')
+        access_token = login_response.data['access']
 
-    # Tests to do
-        # test with invalid access token
+        # A objectId of a MongoDB document is required for the read data request
+        test_file_path = os.path.join(self.BASE_DIR, 'test_data', 'good_test_data.xlsx')
+        with open(test_file_path, 'rb') as real_file:
+            file_content = real_file.read()
+        file = SimpleUploadedFile(
+                name="good_test_data.xlsx",
+                content=file_content,
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        data_upload_response = self.client.post(self.process_data_url, {'file': file}, format='multipart', HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        response_data = json.loads(data_upload_response.content)
+        objectId = response_data['objectId']
+
+        # Modify the access token
+        invalid_access_token = access_token.rsplit('.', 1)[0] + '.invalidsignature'
+
+        # Send read data GET request with valid objectId and invalid access token 
+        data_read_response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {invalid_access_token}')
+
+        # Check that the data read was successful
+        self.assertEqual(data_read_response.status_code, status.HTTP_401_UNAUTHORIZED)
