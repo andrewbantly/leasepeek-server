@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from leasepeek.mongo_models import data_collection
 
 class ProcessDataViewTest(APITestCase):
     def setUp(self):
@@ -116,3 +117,11 @@ class ProcessDataViewTest(APITestCase):
 
         # Ensure the file upload response returns a 400 status code indicating bad request
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+    # Tear down function to clean data from the test MongoDB
+    def tearDown(self):
+        # Delete all documents in the dat collection
+        try:
+            data_collection.delete_many({})
+        except Exception as e:
+            print(f"An error occurred during teardown: {e}")
