@@ -226,6 +226,32 @@ def delete_property(request):
 	"""
 	View to delete a specific property data based on objectId.
 	"""
-	object_id = request.GET.get('objectId', None)
-	data_collection.delete_one({"_id": ObjectId(object_id)})
-	return JsonResponse({"message": "Property data deleted."})
+	try:
+		object_id = request.GET.get('objectId', None)
+
+		# Check if objectId was provided in the request	
+		if not object_id:
+			logger.error("No objectId provided for property deletion")
+			return Response({"message": "objectId must be provided."}, status=status.HTTP_400_BAD_REQUEST)
+		
+		# Attempt to delete the property data
+		result = data_collection.delete_one({"_id": ObjectId(object_id)})
+
+		# If no document was found/deleted, return a 404 Not Found
+		if result.deleted_count == 0:
+			logger.warning("No property found with objectId: %s", object_id)
+			return Response({"message": "Property not found."}, status=status.HTTP_404_NOT_FOUND)
+
+	  # If the delete operation was successful, return a 200 OK
+		logger.info("Property data deleted for objectId: %s", object_id)
+		return Response({"message": "Property data deleted."}, status=status.HTTP_200_OK)
+
+	except InvalidId:
+        # Handle the case where the objectId provided is not valid
+		logger.error("Invalid objectId provided: %s", object_id)
+		return Response({"message": "Invalid objectId format."}, status=status.HTTP_400_BAD_REQUEST)
+
+	except Exception as e:
+        # Log any unexpected errors
+		logger.exception("An error occurred while deleting property data: %s", str(e))
+		return Response({"message": "An error occurred while deleting property data."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
