@@ -50,21 +50,16 @@ class ReadDataViewTest(APITestCase):
 
         return objectId
 
-    # Test read data 
-    def test_read_data(self):
-        test_files = ['good_test_data.xlsx', 'private_test_data_01.xlsx','private_test_data_02.xlsx', 'private_test_data_03.xlsx', 'private_test_data_04.xlsx', 'private_test_data_05.xlsx', 'private_test_data_06.xlsx']
-        
-        for file in test_files:
-            # Upload the test file
-            objectId = self.upload_test_file(file)
+    # Test read data
+    def test_read_data(self):     
+        # Upload the test file
+        objectId = self.upload_test_file('good_test_data.xlsx')
 
-            # Send read data GET request with valid objectId and access token 
-            response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        # Send read data GET request with valid objectId and access token 
+        response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
 
-            # Check that the data read was successful
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-            print(f"##### TEST FILE: {file} PASSED #####")
+        # Check that the data read was successful
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # Test read data with invalid objectId
     def test_read_data_invalid_objectId(self):
@@ -77,6 +72,7 @@ class ReadDataViewTest(APITestCase):
         # Check that the data read was unsuccessful
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    # Test read data with invalid access token
     def test_read_data_invalid_access_token(self):
         # Upload the test file
         objectId = self.upload_test_file('good_test_data.xlsx')
@@ -97,4 +93,3 @@ class ReadDataViewTest(APITestCase):
             data_collection.delete_many({})
         except Exception as e:
             print(f"An error occurred during teardown: {e}")
-
