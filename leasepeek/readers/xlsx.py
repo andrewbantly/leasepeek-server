@@ -24,6 +24,7 @@ from leasepeek.readers.reader_functions.process_unit_data import process_unit_da
 from leasepeek.readers.reader_functions.clean_unit_data import clean_unit_data
 from leasepeek.readers.reader_functions.report_generators.vacancy import vacancy
 from leasepeek.readers.reader_functions.report_generators.floorplan_survey import floorplan_survey
+from leasepeek.readers.reader_functions.loss_to_lease import find_loss_to_lease
 from datetime import datetime, timezone
 
 def read_xlsx(data_frame, user_id, file_name):
@@ -57,23 +58,26 @@ def read_xlsx(data_frame, user_id, file_name):
     # Clean and normalize the processed unit data
     cleaned_unit_data = clean_unit_data(processed_unit_data)
 
+    # Calculate the total number of units from the cleaned data
+    total_units = len(cleaned_unit_data)    
+
     # Calculate vacancy metrics based on the cleaned unit data
     vacancy_data = vacancy(cleaned_unit_data)
 
     # Survey the floorplans from the cleaned unit data
     surveyed_floorplans = floorplan_survey(cleaned_unit_data)
 
-    # Calculate the total number of units from the cleaned data
-    total_units = len(cleaned_unit_data)    
+    loss_to_lease = find_loss_to_lease(cleaned_unit_data)
 
     # Construct the final structured data 
     unit_data = {'user_id': user_id,
                  'date': datetime.now(timezone.utc).isoformat(),
                  'location': property,
                  'asOf': as_of_date,
-                 'vacancy': vacancy_data,
-                 'floorplans': surveyed_floorplans,
                  'totalUnits': total_units,
+                 'floorplans': surveyed_floorplans,
+                 'vacancy': vacancy_data,
+                 'lossToLease': loss_to_lease,
                  'data': cleaned_unit_data
                  }          
     
