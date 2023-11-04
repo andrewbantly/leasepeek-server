@@ -17,5 +17,5 @@ urlpatterns = [
     path('upload', views.process_excel_data, name='process_data'),
     path('read', views.read_excel_data, name='read_data'),
     path('user', views.read_user_data, name='read_user_data'),
-    path('delete', views.delete_property, name='delete_data')
+    path('delete', views.delete_property, name='delete_property')
 ]

@@ -1,4 +1,4 @@
-# Required imports for testing Django REST framework endpoints
+# Required imports for testing Read User Data endpoint
 import os
 from django.urls import reverse
 from rest_framework import status
