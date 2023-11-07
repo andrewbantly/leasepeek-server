@@ -1,6 +1,7 @@
 scratch-pad.txt
 
 .env
+.env.dev
 
 private_test_data_01.xlsx
 private_test_data_02.xlsx

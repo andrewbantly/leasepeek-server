@@ -7,11 +7,11 @@ logger = logging.getLogger(__name__)
 
 if 'test' in sys.argv:
     logger.info("Using Test MongoDB")
-    url = 'mongodb://localhost:27017'
+    url = 'mongodb://mongo:27017'
     client = pymongo.MongoClient(url)
     db = client['snapple_test']
 else:
-    url = 'mongodb://localhost:27017'
+    url = 'mongodb://mongo:27017'
     client = pymongo.MongoClient(url)
     db = client['snapple']
 
