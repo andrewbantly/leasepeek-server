@@ -22,5 +22,12 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy the rest of the application into the container at /app
 COPY . /app/
 
+# Make sure the entrypoint.sh script is copied into the container and is executable
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# Define the entrypoint script to run when starting the container
+ENTRYPOINT ["/app/entrypoint.sh"]
+
 # Define the default command to run when starting the container
 CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
