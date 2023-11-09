@@ -66,9 +66,14 @@ def read_xlsx(data_frame, user_id, file_name):
 
     # Survey the floorplans from the cleaned unit data
     surveyed_floorplans = floorplan_survey(cleaned_unit_data)
+    print("##### SURVEYED FLOORSPLANS ######")
+    print(surveyed_floorplans)
 
     # Calculate loss to lease using the cleaned unit data
     loss_to_lease = find_loss_to_lease(cleaned_unit_data)
+
+    # Calculate the average sq foot per floor plan
+
 
     # Construct the final structured data 
     unit_data = {'user_id': user_id,
