@@ -8,12 +8,13 @@ def floorplan_survey(data):
     # Add unit floor plan data to the floor_plans dictionary
     for unit in data:
         try:
-            market = int(unit['market'])
-            rent = int(unit['rent'])
-            sqft = int(unit['sqft'])
+            market = unit['market']
+            rent = unit['rent']
+            sqft = unit['sqft']
             floorplans[unit['floorplan']].append({'market': market, 'rent': rent, 'sqft': sqft})
-        except ValueError:
-            print(f"Type Error. {unit['market']}, {unit['rent']}, or {unit['sqft']} is not an integer.")
+        except (ValueError, TypeError) as e:
+            print(f"Error converting values for unit. Details: {e}")
+
 
     # Modify the floorplans dictionary to give relevant information
     for plan, units in floorplans.items():
@@ -22,12 +23,9 @@ def floorplan_survey(data):
         rent_sum = sum(unit['rent'] for unit in units)
         rent_count = sum(1 for unit in units if unit['rent'] > 0)
         sqft_sum = sum(unit['sqft'] for unit in units)
-        
         avg_market = round(market_sum / plan_count, 2)
         avg_rent = round(rent_sum / rent_count, 2) if rent_count > 0 else 0
-        avg_sqft = round(sqft_sum / plan_count, 2)
-
-        print(f"For floorplan {plan}, the average rent is {avg_rent} with an average sqft of {avg_sqft}. The stated market value is {avg_market} on average.")
+        avg_sqft = round(sqft_sum / plan_count, 2) if sqft_sum > 0 else 0
 
         floorplans[plan] = {
             'avgRent': avg_rent,
