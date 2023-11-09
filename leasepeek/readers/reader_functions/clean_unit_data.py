@@ -157,7 +157,7 @@ def clean_unit_data(data_array):
             'unit': None,
             'address': None,
             'floorplan': None,
-            'sqft': None,
+            'sqft': 0,
             'market': 0,
             'rent': 0,
             'status': None,
@@ -167,10 +167,10 @@ def clean_unit_data(data_array):
             'moveOut': None,
             'leaseStart': None,
             'leaseExpire': None,
-            'residentDeposit': None,
-            'otherDeposit': None,
-            'balance': None,
-            'total': None,
+            'residentDeposit': 0,
+            'otherDeposit': 0,
+            'balance': 0,
+            'total': 0,
             'nsf': None,
             'charges': [],
             'unclassified': {}
@@ -182,11 +182,11 @@ def clean_unit_data(data_array):
             category = classify_key(key)
 
             # If the key belongs to certain predefined categories, assign the value to the corresponding field in the cleaned_entry.
-            if category in {'unit', 'address', 'floorplan', 'sqft', 'tenant', 'residentId', 'status', 'moveIn', 'moveOut', 'leaseStart','leaseExpire','nsf'}:
+            if category in {'unit', 'address', 'floorplan', 'tenant', 'residentId', 'status', 'moveIn', 'moveOut', 'leaseStart','leaseExpire','nsf'}:
                 cleaned_entry[category] = value
 
             # If the key belongs to categories related to monetary values, perform additional cleaning and conversion.
-            elif category in ['rent', 'total', 'market', 'balance', 'residentDeposit', 'otherDeposit']:
+            elif category in ['rent', 'total', 'market', 'balance', 'residentDeposit', 'otherDeposit', 'sqft']:
                 # If the value is a string, clean it by removing certain characters and whitespace, then attempt to convert it to an integer.
                 if isinstance(value, str):
                     value = value.replace('*', '').replace(',', '').strip()
