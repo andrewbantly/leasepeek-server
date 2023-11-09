@@ -22,9 +22,10 @@ from leasepeek.readers.reader_functions.as_of_date import find_as_of_date
 from leasepeek.readers.reader_functions.unit_data_types import find_unit_data_types
 from leasepeek.readers.reader_functions.process_unit_data import process_unit_data
 from leasepeek.readers.reader_functions.clean_unit_data import clean_unit_data
-from leasepeek.readers.reader_functions.report_generators.vacancy import vacancy
-from leasepeek.readers.reader_functions.report_generators.floorplan_survey import floorplan_survey
+from leasepeek.readers.reader_functions.vacancy import vacancy
+from leasepeek.readers.reader_functions.floorplan_survey import floorplan_survey
 from leasepeek.readers.reader_functions.loss_to_lease import find_loss_to_lease
+from leasepeek.readers.reader_functions.expiring_leases import expiring_leases
 from datetime import datetime, timezone
 
 def read_xlsx(data_frame, user_id, file_name):
@@ -72,8 +73,11 @@ def read_xlsx(data_frame, user_id, file_name):
     # Calculate loss to lease using the cleaned unit data
     loss_to_lease = find_loss_to_lease(cleaned_unit_data)
 
-    # Calculate the average sq foot per floor plan
+    # Recent lease signing analysis
 
+
+    # Expiring leases - NEEDS TO BE CHECKED
+    expiring_leases = expiring_leases(cleaned_unit_data, as_of_date)
 
     # Construct the final structured data 
     unit_data = {'user_id': user_id,
