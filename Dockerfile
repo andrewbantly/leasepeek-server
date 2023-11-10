@@ -1,7 +1,7 @@
 # Use an official Python runtime as a parent image
 FROM python:3.11-bookworm
 
-# Set environment variable PYTHONUNBUFFERED to a non-empty value, ensuring that the Python output is sent straight to terminal (e.g. your container log) without being first buffered and that you can see the output of your application (e.g. Django logs) in real time.
+# Set environment variable PYTHONUNBUFFERED to a non-empty value, ensuring that the Python output is sent straight to terminal (e.g. the container log) without being first buffered and that you can see the output of your application (e.g. Django logs) in real time.
 ENV PYTHONUNBUFFERED 1
 
 # Set environment variable PYTHONDONTWRITEBYTECODE to a non-empty value (typically "1") to prevent Python from writing .pyc files to disk (equivalent to python -B option).
