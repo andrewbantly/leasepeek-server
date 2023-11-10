@@ -73,7 +73,7 @@ def read_xlsx(data_frame, user_id, file_name):
     loss_to_lease = find_loss_to_lease(cleaned_unit_data)
 
     # Recent lease signing analysis
-    recent_leases_analysis = recent_leases(cleaned_unit_data)
+    recent_leases_analysis = recent_leases(cleaned_unit_data, as_of_date)
 
     # Expiring leases - NEEDS TO BE CHECKED
     expired_leases = expiring_leases(cleaned_unit_data, as_of_date)

@@ -12,6 +12,7 @@ Functions:
 Variables:
     unit_keywords, address_keywords, floorplan_keywords, ... , charge_codes, negative_charge_codes: Sets of keywords and codes used for data categorization and identification during the cleaning process.
 """
+from datetime import datetime
 
 # Sets of keyword groupings used to classify data from an input source. Each list contains variations or possible headings found in the dataset that represent the same type of information
 unit_keywords = {'Unit', 'Bldg/Unit', 'Unit Number'}
@@ -226,8 +227,8 @@ def clean_unit_data(data_array):
                 if len(value) == 21:
                     # Split the value into start and end dates.
                     start, end = value.split()
-                    cleaned_entry['leaseStart'] = start
-                    cleaned_entry['leaseExpire'] = end
+                    cleaned_entry['leaseStart'] = datetime.strptime(start, '%m/%d/%Y').strftime('%Y-%m-%d')
+                    cleaned_entry['leaseExpire'] = datetime.strptime(end, '%m/%d/%Y').strftime('%Y-%m-%d')
 
             # If the key's category is not recognized, add it to the 'unclassified' field in the cleaned_entry.
             else:
