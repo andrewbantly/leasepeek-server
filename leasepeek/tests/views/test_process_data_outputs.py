@@ -12,6 +12,7 @@ class ProcessDataViewValuesTest(APITestCase):
         # Establish required end points
         self.process_data_url = reverse('process_data')
         self.login_url = reverse('login')
+        self.read_data_url = reverse('read_data')
 
         # Get the User model
         self.User = get_user_model()
@@ -39,12 +40,24 @@ class ProcessDataViewValuesTest(APITestCase):
                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
         
-        return file
+                # Post the file to the processing endpoint with authentication
+        
+        response = self.client.post(self.process_data_url, {'file': file}, format='multipart', HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+
+        response_data = json.loads(response.content)
+        objectId = response_data['objectId']
+
+        return objectId
     
     # Test valid file upload with valid credentials
     def test_data_output_01(self):
-        file_name = os.environ.get('TEST_FILE_NAME_01')
-        file = self.upload_test_file(file_name)
-        response = self.client.post(self.process_data_url, {'file': file}, format='multipart', HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        file_name = os.environ.get('01_TEST_FILE_NAME')
+        objectId = self.upload_test_file(file_name)
+
+        response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         response_data = json.loads(response.content)
-        self.assertIn('message', response_data)
+        self.assertEqual(response_data[0]['asOf'], os.environ.get('01_TEST_FILE_AS_OF'))
+        self.assertEqual(response_data[0]['location'], os.environ.get('01_TEST_FILE_LOCATION'))
+        self.assertEqual(response_data[0]['totalUnits'], 15)
