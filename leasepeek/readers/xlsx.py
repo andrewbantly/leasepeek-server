@@ -23,6 +23,7 @@ from leasepeek.readers.reader_functions.unit_data_types import find_unit_data_ty
 from leasepeek.readers.reader_functions.process_unit_data import process_unit_data
 from leasepeek.readers.reader_functions.clean_unit_data import clean_unit_data
 from leasepeek.readers.reader_functions.vacancy import vacancy
+from leasepeek.readers.reader_functions.total_units import find_total_units
 from leasepeek.readers.reader_functions.floorplan_survey import floorplan_survey
 from leasepeek.readers.reader_functions.loss_to_lease import find_loss_to_lease
 from leasepeek.readers.reader_functions.expiring_leases import expiring_leases
@@ -61,7 +62,7 @@ def read_xlsx(data_frame, user_id, file_name):
     cleaned_unit_data = clean_unit_data(processed_unit_data)
 
     # Calculate the total number of units from the cleaned data
-    total_units = len(cleaned_unit_data)    
+    total_units = find_total_units(cleaned_unit_data)    
 
     # Calculate vacancy metrics based on the cleaned unit data
     vacancy_data = vacancy(cleaned_unit_data)
