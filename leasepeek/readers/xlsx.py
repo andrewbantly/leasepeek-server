@@ -87,7 +87,7 @@ def read_xlsx(data_frame, user_id, file_name):
                  'floorplans': surveyed_floorplans,
                  'vacancy': vacancy_data,
                  'lossToLease': loss_to_lease,
-                 'data': cleaned_unit_data
+                 'recentLeases': recent_leases_analysis,
                  }          
     
 
