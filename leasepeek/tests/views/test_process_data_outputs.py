@@ -53,11 +53,17 @@ class ProcessDataViewValuesTest(APITestCase):
     def test_data_output_01(self):
         file_name = os.environ.get('01_TEST_FILE_NAME')
         objectId = self.upload_test_file(file_name)
-
         response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+        response_data = json.loads(response.content)[0]
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response_data = json.loads(response.content)
-        self.assertEqual(response_data[0]['asOf'], os.environ.get('01_TEST_FILE_AS_OF'))
-        self.assertEqual(response_data[0]['location'], os.environ.get('01_TEST_FILE_LOCATION'))
-        self.assertEqual(response_data[0]['totalUnits'], 15)
+        print(response_data)
+
+        self.assertEqual(response_data['asOf'], os.environ.get('01_TEST_FILE_AS_OF'))
+        self.assertEqual(response_data['location'], os.environ.get('01_TEST_FILE_LOCATION'))
+        self.assertEqual(response_data['totalUnits'], 15)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['avgRent'], 661.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['sumRent'], 661)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['avgMarket'], 750.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['sumMarket'], 2250)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['unitCount'], 3)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['avgSqft'], 600.0)
