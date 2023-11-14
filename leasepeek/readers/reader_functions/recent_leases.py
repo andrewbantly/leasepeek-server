@@ -1,24 +1,21 @@
 from datetime import datetime, timedelta
 
-
-# TO DO
-# If no date is found, the recent two should still be calculated. 
-# Ensure the test data is working properly as it seems most of the test data isn't within the 90 days, etc window of the as of date. 
-
-
-
 def recent_leases(unit_data, as_of_date_str):
-    print('recent leases')
+    print('Finding recent leases.')
 
     if as_of_date_str == 'Date not found':
-        print("DATE NOT FOUND")
-        return
-
-    as_of_date = datetime.strptime(as_of_date_str, '%m/%d/%Y')
+        as_of_date = datetime.today()
+        print(f"Using {as_of_date} for as of date in recent_leases.py.")
+    else:
+        as_of_date = datetime.strptime(as_of_date_str, '%m/%d/%Y')
+        print(f"Using as of date: {as_of_date}")
 
     date_90_days_ago = as_of_date - timedelta(days=90)
+    print(f"90 days ago is: {date_90_days_ago}")
     date_60_days_ago = as_of_date - timedelta(days=60)
+    print(f"60 days ago is: {date_60_days_ago}")
     date_30_days_ago = as_of_date - timedelta(days=30)
+    print(f"30 days ago is: {date_30_days_ago}")
 
     recent_two = {}
     recent_time_windows = {
@@ -27,13 +24,33 @@ def recent_leases(unit_data, as_of_date_str):
         'last_30_days': {}
     }
 
+    # Initialize recent_two and recent_time_windows for each floorplan
+    for unit in unit_data:
+        floorplan = unit['floorplan']
+        if floorplan not in recent_two:
+            recent_two[floorplan] = []
+        for window in recent_time_windows:
+            if floorplan not in recent_time_windows[window]:
+                recent_time_windows[window][floorplan] = []
+
+
     def parse_date(date_str):
         if isinstance(date_str, str) and date_str.strip():
+            # First try parsing with the '%m/%d/%Y' format
+            try:
+                return datetime.strptime(date_str, '%m/%d/%Y')
+            except ValueError:
+                # If it fails, move on to the next format
+                pass  
+
+            # Then try parsing with the '%Y-%m-%d' format
             try:
                 return datetime.strptime(date_str, '%Y-%m-%d')
             except ValueError:
-                return None
+                # If it still fails, return None
+                return None  
         return None
+
 
     # Sort the unit_data by the sort_date
     unit_data_sorted = sorted(unit_data, key=lambda unit: parse_date(unit.get('moveIn') or unit.get('leaseStart')) or datetime.min, reverse=True)
@@ -45,11 +62,13 @@ def recent_leases(unit_data, as_of_date_str):
 
         if sort_date is None:
             continue
-
-        if floorplan not in recent_two:
-            recent_two[floorplan] = [unit]
-        elif len(recent_two[floorplan]) < 2:
-            recent_two[floorplan].append(unit)
+        
+        if sort_date <= as_of_date:
+            print(f"unit: {unit['unit']}, floorplan: {unit['floorplan']}, rent: {unit['rent']}")
+            if floorplan not in recent_two:
+                recent_two[floorplan] = [unit]
+            elif len(recent_two[floorplan]) < 2:
+                recent_two[floorplan].append(unit)
 
         # Assign unit to the appropriate time window
         for window in recent_time_windows.keys():
@@ -60,6 +79,7 @@ def recent_leases(unit_data, as_of_date_str):
             }[window]
 
             if start_date <= sort_date <= as_of_date:
+                print(f"unit: {unit['unit']}, move in date: {sort_date}, start date: {start_date}")
                 if floorplan not in recent_time_windows[window]:
                     recent_time_windows[window][floorplan] = [unit]
                 else:
@@ -79,5 +99,5 @@ def recent_leases(unit_data, as_of_date_str):
         for category, count in counts.items():
             print(f"  {category}: {count}")
 
-    # Return the recent_two and counts
-    return recent_two, recent_lease_counts
+
+    return recent_lease_counts

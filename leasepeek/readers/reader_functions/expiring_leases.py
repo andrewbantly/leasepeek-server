@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-def expiring_leases(unit_data, as_of_date):
+def expiring_leases(unit_data, as_of_date_str):
     print("expiring leases")
     # print("data as of", as_of_date)
     # start = datetime.strptime(as_of_date, "%m/%d/%Y")
