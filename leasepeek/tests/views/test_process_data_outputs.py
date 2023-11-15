@@ -67,3 +67,55 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['sumMarket'], 2250)
         self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['unitCount'], 3)
         self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['avgSqft'], 600.0)
+
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_02')]['avgRent'], 830.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_02')]['sumRent'], 830)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_02')]['avgMarket'], 875.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_02')]['sumMarket'], 875)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_02')]['unitCount'], 1)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_02')]['avgSqft'], 850.0)
+
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_03')]['avgRent'], 1595.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_03')]['sumRent'], 3190)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_03')]['avgMarket'], 1495.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_03')]['sumMarket'], 4485)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_03')]['unitCount'], 3)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_03')]['avgSqft'], 750.0)
+
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_04')]['avgRent'], 1595.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_04')]['sumRent'], 1595)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_04')]['avgMarket'], 1595.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_04')]['sumMarket'], 1595)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_04')]['unitCount'], 1)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_04')]['avgSqft'], 750.0)
+
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_05')]['avgRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_05')]['sumRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_05')]['avgMarket'], 1620.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_05')]['sumMarket'], 3240)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_05')]['unitCount'], 2)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_05')]['avgSqft'], 750.0)
+
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_06')]['avgRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_06')]['sumRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_06')]['avgMarket'], 1545.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_06')]['sumMarket'], 1545)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_06')]['unitCount'], 1)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_06')]['avgSqft'], 750.0)
+
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_07')]['avgRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_07')]['sumRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_07')]['avgMarket'], 1645.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_07')]['sumMarket'], 3290)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_07')]['unitCount'], 2)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_07')]['avgSqft'], 750.0)
+
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['avgRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['sumRent'], 0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['avgMarket'], 1545.0)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['sumMarket'], 1545)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['unitCount'], 1)
+        self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['avgSqft'], 850.0)
+
+
+
