@@ -1,19 +1,22 @@
 # Defaultdict automatically initializes dictionary entries to a default value if the key has not been set yet. This means one doesn't need to check if the key exists in the dictionary before appending to it.
 from collections import defaultdict
 
+status_keywords = {'upcoming', 'approved', 'Future Residents/Applicants'}
+
 def floorplan_survey(data):
     # Initialize floor plans dictionary that will be returned using defaultdict
     floorplans = defaultdict(list)
 
     # Add unit floor plan data to the floor_plans dictionary
     for unit in data:
-        try:
-            market = unit['market']
-            rent = unit['rent']
-            sqft = unit['sqft']
-            floorplans[unit['floorplan']].append({'market': market, 'rent': rent, 'sqft': sqft})
-        except (ValueError, TypeError) as e:
-            print(f"Error converting values for unit. Details: {e}")
+        if unit['status'] not in status_keywords:
+            try:
+                market = unit['market']
+                rent = unit['rent']
+                sqft = unit['sqft']
+                floorplans[unit['floorplan']].append({'market': market, 'rent': rent, 'sqft': sqft})
+            except (ValueError, TypeError) as e:
+                print(f"Error converting values for unit. Details: {e}")
 
 
     # Modify the floorplans dictionary to give relevant information
@@ -35,6 +38,14 @@ def floorplan_survey(data):
             'unitCount': plan_count,
             'avgSqft': avg_sqft,
         }
+
+    print()
+    print()
+    for plan in floorplans:
+        print(f"plan: {plan}, unit count: {floorplans[plan]['unitCount']}")
+    print()
+    print()
+
 
     # Convert defaultdict back to dict for the return value
     return dict(floorplans)
