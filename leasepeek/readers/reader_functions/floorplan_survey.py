@@ -1,7 +1,7 @@
 # Defaultdict automatically initializes dictionary entries to a default value if the key has not been set yet. This means one doesn't need to check if the key exists in the dictionary before appending to it.
 from collections import defaultdict
 
-status_keywords = {'upcoming', 'approved', 'Future Residents/Applicants'}
+status_keywords = {'upcoming', 'approved', 'Future Residents/Applicants', 'Applicant', 'Pending renewal', 'Former resident', 'Former applicant'}
 
 def floorplan_survey(data):
     # Initialize floor plans dictionary that will be returned using defaultdict
@@ -41,10 +41,15 @@ def floorplan_survey(data):
 
     print()
     print()
+    unit_count = 0
     for plan in floorplans:
         print(f"plan: {plan}, unit count: {floorplans[plan]['unitCount']}")
+        unit_count += floorplans[plan]['unitCount']
     print()
     print()
+    print('unit count', unit_count)
+    # ^ This is currently counting all units statuses, which includes duplicates.
+
 
 
     # Convert defaultdict back to dict for the return value
