@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+keywords = {'Former applicant'}
+
 def recent_leases(unit_data, as_of_date_str):
     print('Finding recent leases.')
     print(unit_data[3])
@@ -65,7 +67,7 @@ def recent_leases(unit_data, as_of_date_str):
         floorplan = unit['floorplan']
         sort_date = parse_date(unit.get('moveIn') or unit.get('leaseStart'))
 
-        if sort_date and sort_date <= as_of_date:
+        if sort_date and sort_date <= as_of_date and unit['status'] not in keywords:
             if floorplan not in recent_two:
                 recent_two[floorplan] = [unit]
             elif len(recent_two[floorplan]) < 2:
