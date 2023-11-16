@@ -6,7 +6,7 @@ def recent_leases(unit_data, as_of_date_str):
     print('Finding recent leases.')
     print(unit_data[3])
     print(f'As of date string: {as_of_date_str}')
-
+    print()
     if as_of_date_str == 'Date not found':
         as_of_date = datetime.today()
         print(f"Using {as_of_date} for as of date in recent_leases.py.")
@@ -28,33 +28,31 @@ def recent_leases(unit_data, as_of_date_str):
         'last_30_days': {}
     }
 
-    # Initialize dictionaries for floorplans
     floorplan_data = {}
 
+    # Initialize floorplan data for all floorplans in unit_data
     for unit in unit_data:
         floorplan = unit['floorplan']
         if floorplan not in floorplan_data:
             floorplan_data[floorplan] = {
-                'recent_two': 0,
+                'recent_two': {
+                    'count': 0,
+                    'total_rent': 0,
+                    'average_rent': 0
+                },
                 'recent_leases': {
-                    'last_90_days': 0,
-                    'last_60_days': 0,
-                    'last_30_days': 0
+                    'last_90_days': {'count': 0, 'total_rent': 0, 'average_rent': 0},
+                    'last_60_days': {'count': 0, 'total_rent': 0, 'average_rent': 0},
+                    'last_30_days': {'count': 0, 'total_rent': 0, 'average_rent': 0}
                 }
             }
-        if floorplan not in recent_two:
-            recent_two[floorplan] = []
-        for window in recent_time_windows:
-            if floorplan not in recent_time_windows[window]:
-                recent_time_windows[window][floorplan] = []
 
     def parse_date(date_str):
         if isinstance(date_str, str) and date_str.strip():
             try:
                 return datetime.strptime(date_str, '%m/%d/%Y')
             except ValueError:
-                pass  
-
+                pass
             try:
                 return datetime.strptime(date_str, '%Y-%m-%d')
             except ValueError:
@@ -69,9 +67,11 @@ def recent_leases(unit_data, as_of_date_str):
 
         if sort_date and sort_date <= as_of_date and unit['status'] not in keywords:
             if floorplan not in recent_two:
-                recent_two[floorplan] = [unit]
-            elif len(recent_two[floorplan]) < 2:
-                recent_two[floorplan].append(unit)
+                recent_two[floorplan] = {'count': 0, 'total_rent': 0}
+
+            if recent_two[floorplan]['count'] < 2:
+                recent_two[floorplan]['count'] += 1
+                recent_two[floorplan]['total_rent'] += unit.get('rent', 0)
 
             for window in recent_time_windows.keys():
                 start_date = {
@@ -82,15 +82,36 @@ def recent_leases(unit_data, as_of_date_str):
 
                 if start_date <= sort_date <= as_of_date:
                     if floorplan not in recent_time_windows[window]:
-                        recent_time_windows[window][floorplan] = [unit]
-                    else:
-                        recent_time_windows[window][floorplan].append(unit)
+                        recent_time_windows[window][floorplan] = []
 
-    # Populate floorplan_data with counts
+                    window_data = recent_time_windows[window][floorplan]
+                    window_data.append(unit)
+
+    # Calculate average rent for recent_two and each time window
     for floorplan in floorplan_data:
-        floorplan_data[floorplan]['recent_two'] = len(recent_two.get(floorplan, []))
-        for window in recent_time_windows:
-            floorplan_data[floorplan]['recent_leases'][window] = len(recent_time_windows[window].get(floorplan, []))
+        # Calculate average rent for recent_two
+        recent_two_data = recent_two.get(floorplan, {'count': 0, 'total_rent': 0})
+        count_recent_two = recent_two_data['count']
+        total_rent_recent_two = recent_two_data['total_rent']
+        average_rent_recent_two = total_rent_recent_two / count_recent_two if count_recent_two > 0 else 0
+        floorplan_data[floorplan]['recent_two'] = {
+            'count': count_recent_two,
+            'total_rent': total_rent_recent_two,
+            'average_rent': average_rent_recent_two
+        }
 
-    # Return the combined counts
+        # Calculate averages for each time window
+        for window in recent_time_windows:
+            lease_count = len(recent_time_windows[window].get(floorplan, []))
+            total_rent = sum(unit.get('rent', 0) for unit in recent_time_windows[window].get(floorplan, []))
+            average_rent = round(total_rent / lease_count, 2) if lease_count > 0 else 0
+            floorplan_data[floorplan]['recent_leases'][window] = {
+                'count': lease_count,
+                'total_rent': total_rent,
+                'average_rent': average_rent
+            }
+
+    print('##### RECENT LEASE DATA')
+    print(floorplan_data)
+    print()
     return floorplan_data
