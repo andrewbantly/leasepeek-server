@@ -275,12 +275,15 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['floorplans'][os.environ.get('04_TEST_FILE_FLOORPLAN_13')]['avgMarket'], 1200.0)
         self.assertEqual(response_data['floorplans'][os.environ.get('04_TEST_FILE_FLOORPLAN_13')]['sumMarket'], 3600)
         
-        # self.assertEqual(response_data['vacancy']['occupied'], 6)
-        # self.assertEqual(response_data['vacancy']['vacant'], 9)
-        # self.assertEqual(response_data['vacancy']['upcoming'], 4)
+        self.assertEqual(response_data['vacancy']['Occupied'], 260)
+        self.assertEqual(response_data['vacancy']['Vacant'], 64)
+        self.assertEqual(response_data['vacancy']['Applicant'], 16)
+        self.assertEqual(response_data['vacancy']['Pending renewal'], 3)
+        self.assertEqual(response_data['vacancy']['Former resident'], 1)
+        self.assertEqual(response_data['vacancy']['Former applicant'], 1)
        
-        # self.assertEqual(response_data['lossToLease']['marketSum'], 20370)
-        # self.assertEqual(response_data['lossToLease']['rentIncome'], 6276)
+        self.assertEqual(response_data['lossToLease']['marketSum'], 560385)
+        self.assertEqual(response_data['lossToLease']['rentIncome'], 401055)
 
         # self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['recent_two'], 2)
         # self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['recent_leases']['last_90_days'], 0)
