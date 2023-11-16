@@ -56,7 +56,5 @@ def floorplan_survey(data):
     print('unit count', unit_count)
     # ^ This is currently counting all units statuses, which includes duplicates.
 
-
-
     # Convert defaultdict back to dict for the return value
     return dict(floorplans)
