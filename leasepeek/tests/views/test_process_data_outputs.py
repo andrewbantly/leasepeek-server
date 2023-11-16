@@ -285,7 +285,67 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['lossToLease']['marketSum'], 560385)
         self.assertEqual(response_data['lossToLease']['rentIncome'], 401055)
 
-        # self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['recent_two'], 2)
-        # self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['recent_leases']['last_90_days'], 0)
-        # self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['recent_leases']['last_60_days'], 0)
-        # self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['recent_leases']['last_30_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_01')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_01')]['recent_leases']['last_90_days'], 4)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_01')]['recent_leases']['last_60_days'], 1)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_01')]['recent_leases']['last_30_days'], 0)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_02')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_02')]['recent_leases']['last_90_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_02')]['recent_leases']['last_60_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_02')]['recent_leases']['last_30_days'], 0)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_03')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_03')]['recent_leases']['last_90_days'], 14)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_03')]['recent_leases']['last_60_days'], 8)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_03')]['recent_leases']['last_30_days'], 7)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_04')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_04')]['recent_leases']['last_90_days'], 9)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_04')]['recent_leases']['last_60_days'], 5)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_04')]['recent_leases']['last_30_days'], 1)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_05')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_05')]['recent_leases']['last_90_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_05')]['recent_leases']['last_60_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_05')]['recent_leases']['last_30_days'], 0)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_06')]['recent_two'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_06')]['recent_leases']['last_90_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_06')]['recent_leases']['last_60_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_06')]['recent_leases']['last_30_days'], 0)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_07')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_07')]['recent_leases']['last_90_days'], 37)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_07')]['recent_leases']['last_60_days'], 24)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_07')]['recent_leases']['last_30_days'], 9)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_08')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_08')]['recent_leases']['last_90_days'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_08')]['recent_leases']['last_60_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_08')]['recent_leases']['last_30_days'], 0)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_09')]['recent_two'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_09')]['recent_leases']['last_90_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_09')]['recent_leases']['last_60_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_09')]['recent_leases']['last_30_days'], 0)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_10')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_10')]['recent_leases']['last_90_days'], 5)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_10')]['recent_leases']['last_60_days'], 4)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_10')]['recent_leases']['last_30_days'], 2)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_11')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_11')]['recent_leases']['last_90_days'], 7)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_11')]['recent_leases']['last_60_days'], 6)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_11')]['recent_leases']['last_30_days'], 3)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_12')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_12')]['recent_leases']['last_90_days'], 5)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_12')]['recent_leases']['last_60_days'], 3)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_12')]['recent_leases']['last_30_days'], 2)
+
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_13')]['recent_two'], 2)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_13')]['recent_leases']['last_90_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_13')]['recent_leases']['last_60_days'], 0)
+        self.assertEqual(response_data['recentLeases'][os.environ.get('04_TEST_FILE_FLOORPLAN_13')]['recent_leases']['last_30_days'], 0)
