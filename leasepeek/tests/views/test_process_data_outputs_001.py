@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from leasepeek.mongo_models import data_collection
 
 class ProcessDataViewValuesTest(APITestCase):
     def setUp(self):
@@ -57,7 +58,7 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['asOf'], os.environ.get('01_TEST_FILE_AS_OF'))
         self.assertEqual(response_data['location'], os.environ.get('01_TEST_FILE_LOCATION'))
         self.assertEqual(response_data['totalUnits'], 15)
-        
+
         self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['avgRent'], 330.5)
         self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['sumRent'], 661)
         self.assertEqual(response_data['floorplans'][os.environ.get('01_TEST_FILE_FLOORPLAN_01')]['avgMarket'], 750.0)
@@ -172,3 +173,11 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['recent_leases']['last_90_days'], 0)
         self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['recent_leases']['last_60_days'], 0)
         self.assertEqual(response_data['recentLeases'][os.environ.get('01_TEST_FILE_FLOORPLAN_08')]['recent_leases']['last_30_days'], 0)
+    
+    # Tear down function to clean data from the test MongoDB
+    def tearDown(self):
+        # Delete all documents in the dat collection
+        try:
+            data_collection.delete_many({})
+        except Exception as e:
+            print(f"An error occurred during teardown: {e}")
