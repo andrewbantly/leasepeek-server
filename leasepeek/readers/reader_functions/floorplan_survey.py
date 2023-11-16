@@ -42,12 +42,16 @@ def floorplan_survey(data):
         }
 
     print()
+    print('floor plan count', len(floorplans))
+
+    for i, plan in enumerate(floorplans):
+        print(f"02_TEST_FILE_FLOORPLAN_{i} = '{plan}'")
+
     print()
     unit_count = 0
     for plan in floorplans:
         print(f"plan: {plan}, unit count: {floorplans[plan]['unitCount']}")
         unit_count += floorplans[plan]['unitCount']
-    print()
     print()
     print('unit count', unit_count)
     # ^ This is currently counting all units statuses, which includes duplicates.
