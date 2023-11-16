@@ -14,6 +14,8 @@ Variables:
 
 # Set of keywords used to identify units with non-explicit statuses that require further classification.
 combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
+occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL'}
+vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased'}
 
 def vacancy(unit_data):
     """
@@ -63,21 +65,32 @@ def vacancy(unit_data):
                         vacancy_statuses['Notice'] += 1
                     else:
                         vacancy_statuses['Notice'] = 1
-                # If none of the above, the unit is considered 'Current' (occupied with no known upcoming vacancy).
+                # If none of the above, the unit is considered 'Occupied' (occupied with no known upcoming vacancy).
                 else:
-                    if 'Current' in vacancy_statuses:
-                        vacancy_statuses['Current'] += 1
+                    if 'Occupied' in vacancy_statuses:
+                        vacancy_statuses['Occupied'] += 1
                     else:
-                        vacancy_statuses['Current'] = 1
+                        vacancy_statuses['Occupied'] = 1
         
         # Handle units with explicit statuses.
-        elif unit['status']: 
+        elif unit['status']:
+            if unit['status'] in occupied_keywords:
             # Increment the count for the unit's status.
-            if unit['status'] in vacancy_statuses:
-                vacancy_statuses[unit['status']] += 1
+                if 'Occupied' in vacancy_statuses:
+                    vacancy_statuses['Occupied'] += 1
+                else:
+                    vacancy_statuses['Occupied'] = 1
+            elif unit['status'] in vacant_keywords:
+                if 'Vacant' in vacancy_statuses:
+                    vacancy_statuses['Vacant'] += 1
+                else:
+                    vacancy_statuses['Vacant'] = 1
             else:
-                vacancy_statuses[unit['status']] = 1
-
+                if unit['status'] in vacancy_statuses:
+                    vacancy_statuses[unit['status']] += 1
+                else:
+                    vacancy_statuses[unit['status']] = 1
+                    
         # For units without a status, check if 'vacant' is mentioned in the 'tenant' field.
         else:
             if 'vacant' in unit['tenant'].lower():
@@ -90,5 +103,8 @@ def vacancy(unit_data):
         # If there was no status data, report based on 'vacant' counts.
         occupied = total_units - vacants
         vacancy_data = {"Vacant": vacants, "Occupied": occupied}
-
+    print()
+    print("#### Vacancy:")
+    print(vacancy_data)
+    print()
     return vacancy_data
