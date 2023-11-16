@@ -14,8 +14,8 @@ Variables:
 
 # Set of keywords used to identify units with non-explicit statuses that require further classification.
 combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
-occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL'}
-vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased'}
+occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL', 'O', 'NR', 'NU'}
+vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased', 'VU', 'VR'}
 
 def vacancy(unit_data):
     """
