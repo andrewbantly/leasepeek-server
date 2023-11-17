@@ -3,9 +3,9 @@ from datetime import datetime, timedelta
 keywords = {'Former applicant'}
 
 def recent_leases(unit_data, as_of_date_str):
-    print('Finding recent leases.')
-    print(unit_data[3])
-    print(f'As of date string: {as_of_date_str}')
+    # print('Finding recent leases.')
+    # print(unit_data[3])
+    # print(f'As of date string: {as_of_date_str}')
     print()
     if as_of_date_str == 'Date not found':
         as_of_date = datetime.today()
@@ -111,7 +111,7 @@ def recent_leases(unit_data, as_of_date_str):
                 'average_rent': average_rent
             }
 
-    print('##### RECENT LEASE DATA')
-    print(floorplan_data)
-    print()
+    # print('##### RECENT LEASE DATA')
+    # print(floorplan_data)
+    # print()
     return floorplan_data
