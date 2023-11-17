@@ -38,6 +38,8 @@ NSF_keywords = {'NSF Count'}
 # Sets of charge codes, including those that are specifically for negative values
 charge_codes = {'rub', 'valtsh', 'cmf', 'package', 'pst', 'prk', 'covpark', 'bbpest', 'conciere', 'bbtr', 'zero', 'ptr', 'CNSVCpst', 'mtm', 'rubsew', 'emp', 'petf', 'conc-prk', 'insur', 'stor', 'svcanml', 'conc-lmp', 'conc-sto', 'Utility', 'Utility Recapture', 'TECH', 'PETF', 'CONC', 'STOR', 'EMPL', 'MODL', 'OFCR', 'LTOR-Loss To Lease In Force', 'STOR-Storage Space #', 'CABL-Cable Television Charges', 'INTR-Internet Access', 'PARK-Parking', 'MTOM-Month To Month Charges', 'RLL-PDLW', 'LTOL-Loss To Lease In Force', 'GAR-Garage Rental', 'RLLG-PDLW LEGACY', 'PETR-Pet Rent', 'W/D Washer/Dryer Rental Charges', 'VAC -Vacancy Loss', 'GTOL-Gain To Lease In Force', 'GTOR-Gain To Lease In Force', 'W/D-Washer/Dryer Rental Charges', 'PETF-Pet Fees Or Charges', 'GAR-Garage Rental #', 'MODE-Model', 'park', 'mtmf', 'conc-rec'}
 negative_charge_codes = {'MODE-Model', 'LTOL-Loss To Lease In Force', 'VAC -Vacancy Loss'}
+vacancy_loss_charge_codes = {'VAC -Vacancy Loss'}
+model_loss_charge_codes = {'MODE-Model'}
 
 def classify_key(key):
     """
@@ -233,6 +235,13 @@ def clean_unit_data(data_array):
             # If the key's category is not recognized, add it to the 'unclassified' field in the cleaned_entry.
             else:
                 cleaned_entry['unclassified'][key] = value
+
+        for charge in cleaned_entry.get('charges', []):
+            if charge['code'] in vacancy_loss_charge_codes:
+                # Subtract the charge value from the rent
+                cleaned_entry['rent'] += charge['value']
+            elif charge['code'] in model_loss_charge_codes:
+                cleaned_entry['rent'] += charge['value']
 
         # Add the cleaned_entry dictionary to the cleaned_data list.
         cleaned_data.append(cleaned_entry)
