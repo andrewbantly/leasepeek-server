@@ -44,8 +44,8 @@ def floorplan_survey(data):
     print()
     print('floor plan count', len(floorplans))
 
-    for i, plan in enumerate(floorplans):
-        print(f"02_TEST_FILE_FLOORPLAN_{i} = '{plan}'")
+    # for i, plan in enumerate(floorplans):
+    #     print(f"03_TEST_FILE_FLOORPLAN_{i+1} = '{plan}'")
 
     print()
     unit_count = 0
