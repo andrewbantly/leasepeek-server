@@ -16,6 +16,7 @@ Variables:
 combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
 occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL', 'O', 'NR', 'NU'}
 vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased', 'VU', 'VR'}
+non_revenue_keywords = {'model', 'down'}
 
 def vacancy(unit_data):
     """
@@ -59,13 +60,13 @@ def vacancy(unit_data):
                         vacancy_statuses['Vacant'] += 1
                     else:
                         vacancy_statuses['Vacant'] = 1
-                # If there's a move-out date, increment the 'Notice' count (indicating upcoming vacancy).
-                elif 'model' in unit['tenant'].lower():
-                    if 'Model' in vacancy_statuses:
-                        vacancy_statuses['Model'] += 1
+                # If there's a model or down unit, increment the 'NonRev' count (indicating a unit not generating revenue).
+                elif unit['tenant'].lower() in non_revenue_keywords:
+                    if 'NonRev' in vacancy_statuses:
+                        vacancy_statuses['NonRev'] += 1
                     else:
-                        vacancy_statuses['Model'] = 1
-                # If none of the above, the unit is considered 'Occupied' (occupied with no known upcoming vacancy).
+                        vacancy_statuses['NonRev'] = 1
+                # If none of the above, the unit is considered 'Occupied'.
                 else:
                     if 'Occupied' in vacancy_statuses:
                         vacancy_statuses['Occupied'] += 1
