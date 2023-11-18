@@ -10,10 +10,6 @@ def floorplan_survey(data):
 
     # Add unit floor plan data to the floor_plans dictionary
     for unit in data:
-        if unit['floorplan'] == '114a1ada':
-            print()
-            print("#### LOOK HERE")
-            print(unit)
         if unit['status'] not in status_keywords:
             try:
                 market = unit['market']
@@ -58,7 +54,6 @@ def floorplan_survey(data):
         unit_count += floorplans[plan]['unitCount']
     print()
     print('unit count', unit_count)
-    # ^ This is currently counting all units statuses, which includes duplicates.
 
     # Convert defaultdict back to dict for the return value
     return dict(floorplans)
