@@ -50,46 +50,23 @@ class ProcessDataViewValuesTest(APITestCase):
     
     # Test valid file upload with valid credentials
     def test_data_output(self):
-        file_name = os.environ.get('05_TEST_FILE_NAME')
+        file_name = os.environ.get('06_TEST_FILE_NAME')
         objectId = self.upload_test_file(file_name)
         response = self.client.get(self.read_data_url, {'objectId': objectId}, HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
         response_data = json.loads(response.content)[0]
 
 
-        self.assertEqual(response_data['asOf'], os.environ.get('05_TEST_FILE_AS_OF'))
-        self.assertEqual(response_data['location'], os.environ.get('05_TEST_FILE_LOCATION'))
-        self.assertEqual(response_data['totalUnits'], 310)
-        self.assertEqual(response_data['vacancy']['Occupied'], 262)
-        self.assertEqual(response_data['vacancy']['Vacant'], 46)
+        self.assertEqual(response_data['asOf'], os.environ.get('06_TEST_FILE_AS_OF'))
+        self.assertEqual(response_data['location'], os.environ.get('06_TEST_FILE_LOCATION'))
+        self.assertEqual(response_data['totalUnits'], 280)
+        self.assertEqual(response_data['vacancy']['Occupied'], 251)
+        self.assertEqual(response_data['vacancy']['Vacant'], 27)
         self.assertEqual(response_data['vacancy']['NonRev'], 2)
        
-        self.assertEqual(response_data['lossToLease']['marketSum'], 542451)
-        self.assertEqual(response_data['lossToLease']['rentIncome'], 461333)
+        self.assertEqual(response_data['lossToLease']['marketSum'], 291185)
+        self.assertEqual(response_data['lossToLease']['rentIncome'], 257672)
 
-        # Floor plan analysis testing
-        # days_90 = 'last_90_days'
-        # days_60 = 'last_60_days'
-        # days_30 = 'last_30_days'
 
-        # floorplan01 = os.environ.get('05_TEST_FILE_FLOORPLAN_01')
-        # self.assertEqual(response_data['floorplans'][floorplan01]['avgRent'], 1364.5)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['sumRent'], 27290)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['avgMarket'], 1500.0)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['sumMarket'], 31500)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['unitCount'], 21)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['avgSqft'], 657.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_two']['count'], 2)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_two']['total_rent'], 2800)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_two']['average_rent'], 1400.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_90]['count'], 4)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_90]['total_rent'], 5500)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_90]['average_rent'], 1375.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_60]['count'], 1)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_60]['total_rent'], 1450)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_60]['average_rent'], 1450.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_30]['count'], 0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_30]['total_rent'], 0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_30]['average_rent'], 0)
 
     # Tear down function to clean data from the test MongoDB
     def tearDown(self):
