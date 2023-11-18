@@ -90,9 +90,19 @@ def process_unit_data(df, data_types):
     for row_index in range(data_starting_row, data_ending_row):
         # Skip the row if it's a status header or doesn't contain unit data.
         if df.iloc[row_index, 0] == "Current/Notice/Vacant Residents":
+            if current_unit:
+                if status:
+                    current_unit['Status'] = status
+                data.append(current_unit)
+                current_unit = {}
             status = "Current/Notice/Vacant Residents"
             continue
         if df.iloc[row_index, 0] == "Future Residents/Applicants":
+            if current_unit:
+                if status:
+                    current_unit['Status'] = status
+                data.append(current_unit)
+                current_unit = {}
             status = "Future Residents/Applicants"
             continue
 
@@ -136,6 +146,7 @@ def process_unit_data(df, data_types):
                     current_unit[charge_line] = charge_amount
                     charge_line = ""
                     charge_amount = 0
+
 
     # Add the last unit to the data list after finishing the row iteration. Add the `status` edge case if necessary.
     if status:
