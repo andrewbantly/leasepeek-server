@@ -60,11 +60,11 @@ def vacancy(unit_data):
                     else:
                         vacancy_statuses['Vacant'] = 1
                 # If there's a move-out date, increment the 'Notice' count (indicating upcoming vacancy).
-                elif unit['moveOut']:
-                    if 'Notice' in vacancy_statuses:
-                        vacancy_statuses['Notice'] += 1
+                elif 'model' in unit['tenant'].lower():
+                    if 'Model' in vacancy_statuses:
+                        vacancy_statuses['Model'] += 1
                     else:
-                        vacancy_statuses['Notice'] = 1
+                        vacancy_statuses['Model'] = 1
                 # If none of the above, the unit is considered 'Occupied' (occupied with no known upcoming vacancy).
                 else:
                     if 'Occupied' in vacancy_statuses:
