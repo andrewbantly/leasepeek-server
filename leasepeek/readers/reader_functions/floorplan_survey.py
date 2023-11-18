@@ -10,6 +10,10 @@ def floorplan_survey(data):
 
     # Add unit floor plan data to the floor_plans dictionary
     for unit in data:
+        if unit['floorplan'] == '114a1ada':
+            print()
+            print("#### LOOK HERE")
+            print(unit)
         if unit['status'] not in status_keywords:
             try:
                 market = unit['market']
@@ -44,8 +48,8 @@ def floorplan_survey(data):
     print()
     print('floor plan count', len(floorplans))
 
-    # for i, plan in enumerate(floorplans):
-    #     print(f"03_TEST_FILE_FLOORPLAN_{i+1} = '{plan}'")
+    for i, plan in enumerate(floorplans):
+        print(f"05_TEST_FILE_FLOORPLAN_{i+1} = '{plan}'")
 
     print()
     unit_count = 0

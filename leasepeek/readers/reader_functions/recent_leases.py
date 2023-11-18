@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-keywords = {'Former applicant'}
+keywords = {'Former applicant', 'Future Residents/Applicants'}
 
 def recent_leases(unit_data, as_of_date_str):
     # print('Finding recent leases.')

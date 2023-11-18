@@ -67,29 +67,29 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['lossToLease']['rentIncome'], 461333)
 
         # Floor plan analysis testing
-        # days_90 = 'last_90_days'
-        # days_60 = 'last_60_days'
-        # days_30 = 'last_30_days'
+        days_90 = 'last_90_days'
+        days_60 = 'last_60_days'
+        days_30 = 'last_30_days'
 
-        # floorplan01 = os.environ.get('05_TEST_FILE_FLOORPLAN_01')
-        # self.assertEqual(response_data['floorplans'][floorplan01]['avgRent'], 1364.5)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['sumRent'], 27290)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['avgMarket'], 1500.0)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['sumMarket'], 31500)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['unitCount'], 21)
-        # self.assertEqual(response_data['floorplans'][floorplan01]['avgSqft'], 657.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_two']['count'], 2)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_two']['total_rent'], 2800)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_two']['average_rent'], 1400.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_90]['count'], 4)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_90]['total_rent'], 5500)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_90]['average_rent'], 1375.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_60]['count'], 1)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_60]['total_rent'], 1450)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_60]['average_rent'], 1450.0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_30]['count'], 0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_30]['total_rent'], 0)
-        # self.assertEqual(response_data['recentLeases'][floorplan01]['recent_leases'][days_30]['average_rent'], 0)
+        floorplan1 = os.environ.get('05_TEST_FILE_FLOORPLAN_1')
+        self.assertEqual(response_data['floorplans'][floorplan1]['avgRent'], 1685.0)
+        self.assertEqual(response_data['floorplans'][floorplan1]['sumRent'], 1685)
+        self.assertEqual(response_data['floorplans'][floorplan1]['avgMarket'], 1671.67)
+        self.assertEqual(response_data['floorplans'][floorplan1]['sumMarket'], 5015)
+        self.assertEqual(response_data['floorplans'][floorplan1]['unitCount'], 3)
+        self.assertEqual(response_data['floorplans'][floorplan1]['avgSqft'], 782.0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_two']['count'], 1)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_two']['total_rent'], 1685)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_two']['average_rent'], 1685.0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_90]['count'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_90]['total_rent'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_90]['average_rent'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_60]['count'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_60]['total_rent'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_60]['average_rent'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_30]['count'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_30]['total_rent'], 0)
+        self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_30]['average_rent'], 0)
 
     # Tear down function to clean data from the test MongoDB
     def tearDown(self):
