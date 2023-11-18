@@ -90,6 +90,7 @@ def process_unit_data(df, data_types):
     for row_index in range(data_starting_row, data_ending_row):
         # Skip the row if it's a status header or doesn't contain unit data.
         if df.iloc[row_index, 0] == "Current/Notice/Vacant Residents":
+            # If there's existing data in the current unit, add it to the list and start a new unit. Add the edge case status if necessary.
             if current_unit:
                 if status:
                     current_unit['Status'] = status
@@ -98,6 +99,7 @@ def process_unit_data(df, data_types):
             status = "Current/Notice/Vacant Residents"
             continue
         if df.iloc[row_index, 0] == "Future Residents/Applicants":
+            # If there's existing data in the current unit, add it to the list and start a new unit. Add the edge case status if necessary.
             if current_unit:
                 if status:
                     current_unit['Status'] = status
