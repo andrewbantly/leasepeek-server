@@ -17,12 +17,8 @@ def determine_date_format(date_str):
 def expiring_leases(unit_data, as_of_date_str):
     as_of_date = datetime.strptime(as_of_date_str, "%m/%d/%Y")
     ninety_days_from_as_of_date = as_of_date + timedelta(days=90)
-    expiring_leases_count = 0
-
-    expiring_time_windows = {
-        'expiring_in_90_days': {},
-        'expired': {}
-    }
+    print()
+    print("#### Expiring - ", ninety_days_from_as_of_date)
 
     floorplan_expiration_data = {}
 
