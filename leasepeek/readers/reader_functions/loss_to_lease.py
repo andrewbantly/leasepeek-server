@@ -9,14 +9,6 @@ def find_loss_to_lease(unit_data):
         if unit['status'] not in status_keywords:
             market_sum += unit['market']
             rent_income += unit['rent']
-
-    print()
-    print("##### LOSS TO LEASE")
-    print({
-        'marketSum': market_sum,
-        'rentIncome': rent_income
-    })
-    print()
     
     return {
         'marketSum': market_sum,

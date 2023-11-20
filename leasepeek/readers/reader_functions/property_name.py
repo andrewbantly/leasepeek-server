@@ -38,7 +38,6 @@ def find_property_name(df, title_row):
     for i, row in df.head(title_row).iterrows():
         # Create a concatenated string of the row, omitting 'nan' values
         row_str = ' '.join(row.dropna().astype(str))
-        print(row_str)
         
         # If the row string contains any of the predefined keywords, set it as the property name and break
         if any(keyword in row_str for keyword in keywords):

@@ -3,23 +3,17 @@ from datetime import datetime, timedelta
 keywords = {'Former applicant', 'Future Residents/Applicants'}
 
 def recent_leases(unit_data, as_of_date_str):
-    # print('Finding recent leases.')
-    # print(unit_data[3])
-    # print(f'As of date string: {as_of_date_str}')
-    print()
     if as_of_date_str == 'Date not found':
         as_of_date = datetime.today()
-        print(f"Using {as_of_date} for as of date in recent_leases.py.")
     else:
         as_of_date = datetime.strptime(as_of_date_str, '%m/%d/%Y')
-        print(f"Using as of date: {as_of_date}")
 
     date_90_days_ago = as_of_date - timedelta(days=90)
-    print(f"90 days ago is: {date_90_days_ago}")
+    # print(f"90 days ago is: {date_90_days_ago}")
     date_60_days_ago = as_of_date - timedelta(days=60)
-    print(f"60 days ago is: {date_60_days_ago}")
+    # print(f"60 days ago is: {date_60_days_ago}")
     date_30_days_ago = as_of_date - timedelta(days=30)
-    print(f"30 days ago is: {date_30_days_ago}")
+    # print(f"30 days ago is: {date_30_days_ago}")
 
     recent_two = {}
     recent_time_windows = {
@@ -110,8 +104,5 @@ def recent_leases(unit_data, as_of_date_str):
                 'total_rent': total_rent,
                 'average_rent': average_rent
             }
-
-    # print('##### RECENT LEASE DATA')
-    # print(floorplan_data)
-    # print()
+            
     return floorplan_data

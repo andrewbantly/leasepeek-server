@@ -46,9 +46,6 @@ def find_as_of_date(df, title_row, file_name):
 
     # If a match is found, extract the date and return it
     if match:
-        print("Match")
-        print(match.group(0))
-        print(match.group(1))
         # Extract the matched date string. We use .group(1) because our regular expression has one capturing group denoted by the parentheses
         date = match.group(1)
 

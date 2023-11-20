@@ -17,9 +17,6 @@ def determine_date_format(date_str):
 def expiring_leases(unit_data, as_of_date_str):
     as_of_date = datetime.strptime(as_of_date_str, "%m/%d/%Y")
     ninety_days_from_as_of_date = as_of_date + timedelta(days=90)
-    print()
-    print("#### Expiring - ", ninety_days_from_as_of_date)
-
     floorplan_expiration_data = {}
 
     # Initialize floorplan data for all floorplans in unit_data
@@ -49,7 +46,5 @@ def expiring_leases(unit_data, as_of_date_str):
             except ValueError:
                 # The date format is not valid or is empty
                 print(f"Can not determine lease expire of unit. Invalid date format for unit: {unit}")
-
-    print(floorplan_expiration_data)
 
     return floorplan_expiration_data

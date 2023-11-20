@@ -104,8 +104,5 @@ def vacancy(unit_data):
         # If there was no status data, report based on 'vacant' counts.
         occupied = total_units - vacants
         vacancy_data = {"Vacant": vacants, "Occupied": occupied}
-    print()
-    print("#### Vacancy:")
-    print(vacancy_data)
-    print()
+
     return vacancy_data

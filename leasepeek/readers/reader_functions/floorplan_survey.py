@@ -41,19 +41,8 @@ def floorplan_survey(data):
             'avgSqft': avg_sqft,
         }
 
-    print()
-    print('floor plan count', len(floorplans))
-
-    for i, plan in enumerate(floorplans):
-        print(f"07_TEST_FILE_FLOORPLAN_{i+1} = '{plan}'")
-
-    print()
-    unit_count = 0
-    for plan in floorplans:
-        print(f"plan: {plan}, unit count: {floorplans[plan]['unitCount']}")
-        unit_count += floorplans[plan]['unitCount']
-    print()
-    print('unit count', unit_count)
+    # for i, plan in enumerate(floorplans):
+    #     print(f"07_TEST_FILE_FLOORPLAN_{i+1} = '{plan}'")
 
     # Convert defaultdict back to dict for the return value
     return dict(floorplans)
