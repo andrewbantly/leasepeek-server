@@ -89,7 +89,7 @@ def read_xlsx(data_frame, user_id, file_name):
                  'vacancy': vacancy_data,
                  'lossToLease': loss_to_lease,
                  'recentLeases': recent_leases_analysis,
-                 'expiredLeases': expired_leases,
+                 'expiringLeases': expired_leases,
                  }          
     
 
