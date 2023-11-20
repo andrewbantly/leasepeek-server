@@ -68,6 +68,8 @@ class ProcessDataViewValuesTest(APITestCase):
         days_90 = 'last_90_days'
         days_60 = 'last_60_days'
         days_30 = 'last_30_days'
+        expiring_90 = "expiring_in_90_days"
+        expired = "expired"
 
         floorplan1 = os.environ.get('07_TEST_FILE_FLOORPLAN_1')
         self.assertEqual(response_data['floorplans'][floorplan1]['avgRent'], 1826.76)
@@ -88,6 +90,10 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_30]['count'], 1)
         self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_30]['total_rent'], 1898)
         self.assertEqual(response_data['recentLeases'][floorplan1]['recent_leases'][days_30]['average_rent'], 1898.0)
+        self.assertEqual(response_data['expiringLeases'][floorplan1][expiring_90]['count'], 11)
+        self.assertEqual(response_data['expiringLeases'][floorplan1][expiring_90]['total_rent'], 20011)
+        self.assertEqual(response_data['expiringLeases'][floorplan1][expired]['count'], 1)
+        self.assertEqual(response_data['expiringLeases'][floorplan1][expired]['total_rent'], 1975)
 
         floorplan2 = os.environ.get('07_TEST_FILE_FLOORPLAN_2')
         self.assertEqual(response_data['floorplans'][floorplan2]['avgRent'], 1782.32)
@@ -108,6 +114,11 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['recentLeases'][floorplan2]['recent_leases'][days_30]['count'], 0)
         self.assertEqual(response_data['recentLeases'][floorplan2]['recent_leases'][days_30]['total_rent'], 0)
         self.assertEqual(response_data['recentLeases'][floorplan2]['recent_leases'][days_30]['average_rent'], 0)
+        self.assertEqual(response_data['expiringLeases'][floorplan2][expiring_90]['count'], 7)
+        self.assertEqual(response_data['expiringLeases'][floorplan2][expiring_90]['total_rent'], 12499)
+        self.assertEqual(response_data['expiringLeases'][floorplan2][expired]['count'], 0)
+        self.assertEqual(response_data['expiringLeases'][floorplan2][expired]['total_rent'], 0)
+
 
         floorplan3 = os.environ.get('07_TEST_FILE_FLOORPLAN_3')
         self.assertEqual(response_data['floorplans'][floorplan3]['avgRent'], 1548.33)
@@ -128,6 +139,10 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['recentLeases'][floorplan3]['recent_leases'][days_30]['count'], 0)
         self.assertEqual(response_data['recentLeases'][floorplan3]['recent_leases'][days_30]['total_rent'], 0)
         self.assertEqual(response_data['recentLeases'][floorplan3]['recent_leases'][days_30]['average_rent'], 0)
+        self.assertEqual(response_data['expiringLeases'][floorplan3][expiring_90]['count'], 0)
+        self.assertEqual(response_data['expiringLeases'][floorplan3][expiring_90]['total_rent'], 0)
+        self.assertEqual(response_data['expiringLeases'][floorplan3][expired]['count'], 0)
+        self.assertEqual(response_data['expiringLeases'][floorplan3][expired]['total_rent'], 0)
 
 
 
