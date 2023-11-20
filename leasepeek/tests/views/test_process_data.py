@@ -46,7 +46,15 @@ class ProcessDataViewTest(APITestCase):
     # Test valid file upload with valid credentials
     def test_process_valid_data(self):
         # Test file names
-        test_files = ['good_test_data.xlsx', 'private_test_data_01.xlsx','private_test_data_02.xlsx', 'private_test_data_03.xlsx', 'private_test_data_04.xlsx', 'private_test_data_05.xlsx', 'private_test_data_06.xlsx']
+        file_name01 = os.environ.get('01_TEST_FILE_NAME')
+        file_name02 = os.environ.get('02_TEST_FILE_NAME')
+        file_name03 = os.environ.get('03_TEST_FILE_NAME')
+        file_name04 = os.environ.get('04_TEST_FILE_NAME')
+        file_name05 = os.environ.get('05_TEST_FILE_NAME')
+        file_name06 = os.environ.get('06_TEST_FILE_NAME')
+        file_name07 = os.environ.get('07_TEST_FILE_NAME')
+
+        test_files = ['good_test_data.xlsx', file_name01, file_name02, file_name03, file_name04, file_name05, file_name06, file_name07]
 
         for name in test_files:
             # Prepare the test file for upload
