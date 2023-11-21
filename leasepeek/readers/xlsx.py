@@ -80,7 +80,7 @@ def read_xlsx(data_frame, user_id, file_name):
     expired_leases = expiring_leases(cleaned_unit_data, as_of_date)
 
     # Construct the final structured data 
-    unit_data = {'user_id': user_id,
+    property_data = {'user_id': user_id,
                  'date': datetime.now(timezone.utc).isoformat(),
                  'location': property,
                  'asOf': as_of_date,
@@ -91,6 +91,5 @@ def read_xlsx(data_frame, user_id, file_name):
                  'recentLeases': recent_leases_analysis,
                  'expiringLeases': expired_leases,
                  }          
-    
 
-    return unit_data
+    return property_data
