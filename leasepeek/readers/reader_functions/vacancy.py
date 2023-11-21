@@ -16,7 +16,9 @@ Variables:
 combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
 occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL', 'O', 'NR', 'NU'}
 vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased', 'VU', 'VR'}
-non_revenue_keywords = {'model', 'down'}
+down_unit_keywords = {'down'}
+model_unit_keywords = {'model'}
+ignore_keywords = {'Former resident', 'Former applicant'}
 
 def vacancy(unit_data):
     """
@@ -60,12 +62,18 @@ def vacancy(unit_data):
                         vacancy_statuses['Vacant'] += 1
                     else:
                         vacancy_statuses['Vacant'] = 1
-                # If there's a model or down unit, increment the 'NonRev' count (indicating a unit not generating revenue).
-                elif unit['tenant'].lower() in non_revenue_keywords:
-                    if 'NonRev' in vacancy_statuses:
-                        vacancy_statuses['NonRev'] += 1
+                # If there's a model unit, increment the 'Model' count.
+                elif unit['tenant'].lower() in model_unit_keywords:
+                    if 'Model' in vacancy_statuses:
+                        vacancy_statuses['Model'] += 1
                     else:
-                        vacancy_statuses['NonRev'] = 1
+                        vacancy_statuses['Model'] = 1
+                # If there's a down unit, increment the 'Down' count.
+                elif unit['tenant'].lower() in down_unit_keywords:
+                    if 'Down' in vacancy_statuses:
+                        vacancy_statuses['Down'] += 1
+                    else:
+                        vacancy_statuses['Down'] = 1
                 # If none of the above, the unit is considered 'Occupied'.
                 else:
                     if 'Occupied' in vacancy_statuses:
@@ -86,6 +94,8 @@ def vacancy(unit_data):
                     vacancy_statuses['Vacant'] += 1
                 else:
                     vacancy_statuses['Vacant'] = 1
+            elif unit['status'] in ignore_keywords:
+                continue
             else:
                 if unit['status'] in vacancy_statuses:
                     vacancy_statuses[unit['status']] += 1
@@ -104,5 +114,7 @@ def vacancy(unit_data):
         # If there was no status data, report based on 'vacant' counts.
         occupied = total_units - vacants
         vacancy_data = {"Vacant": vacants, "Occupied": occupied}
-
+    print()
+    print("### Vacancy data")
+    print(vacancy_data)
     return vacancy_data
