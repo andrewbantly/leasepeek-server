@@ -216,8 +216,6 @@ def read_excel_data(request):
 			return JsonResponse({"message": "Data not found."}, status=status.HTTP_204_NO_CONTENT)
 
 		logger.info("Data retrieved successfully")
-		print("### PROP PROFILE RESULTS")
-		print(results)
 		return JsonResponse(results, safe=False, status=status.HTTP_200_OK)
 	except Exception as e:
 		logger.error("Error retrieving data for ObjectId: %s", object_id)
