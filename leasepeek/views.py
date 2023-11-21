@@ -173,13 +173,12 @@ def read_user_data(request):
 	else:
 		# If there is at least one document, process the cursor
 		basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits']
-		results = [ {k: item[k] for k in basic_data if k in item} for item in cursor ]
-		for data in results:
-			data['objectId'] = str(first_document['_id'])
+		results = []
+		for item in cursor:
+			data_item = {k: item[k] for k in basic_data if k in item}
+			data_item['objectId'] = str(item['_id'])
+			results.append(data_item)
 		logger.info("Basic building data retrieved for User ID: %s", user_id)
-		print()
-		print("### RESULTS")
-		print(results)
 		return Response({"data": results, "message": "Basic building data successfully retrieved."}, status=status.HTTP_200_OK)
 
 
