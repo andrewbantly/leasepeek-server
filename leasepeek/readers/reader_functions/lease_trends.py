@@ -80,5 +80,5 @@ def analyze_lease_trends(unit_data, as_of_date_str):
                 "NumOfLeases": lease_count,
                 "AvgLeasePerSqFt": avg_lease_per_sqft
             }
-    
+        
     return results
