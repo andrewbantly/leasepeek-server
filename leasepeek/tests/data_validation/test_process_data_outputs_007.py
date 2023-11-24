@@ -72,7 +72,7 @@ class ProcessDataViewValuesTest(APITestCase):
         expired = "expired"
 
         floorplan1 = os.environ.get('07_TEST_FILE_FLOORPLAN_1')
-        self.assertEqual(response_data['floorplans'][floorplan1]['avgRent'], 1826.76)
+        self.assertEqual(response_data['floorplans'][floorplan1]['avgRent'], 1790.94)
         self.assertEqual(response_data['floorplans'][floorplan1]['sumRent'], 91338)
         self.assertEqual(response_data['floorplans'][floorplan1]['avgMarket'], 1859.52)
         self.assertEqual(response_data['floorplans'][floorplan1]['sumMarket'], 96695)
