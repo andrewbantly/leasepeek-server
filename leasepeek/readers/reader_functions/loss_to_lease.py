@@ -1,6 +1,6 @@
 
 
-status_keywords = {'upcoming', 'approved', 'Future Residents/Applicants', 'Applicant', 'Pending renewal', 'Former resident', 'Former applicant'}
+status_keywords = {'upcoming', 'approved', 'Future Residents/Applicants', 'Applicant', 'Pending renewal', 'Former resident', 'Former applicant', 'applicant'}
 
 def find_loss_to_lease(unit_data):
     market_sum = 0
