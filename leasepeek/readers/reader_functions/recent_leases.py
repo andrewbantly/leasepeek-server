@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-keywords = {'Former applicant', 'Future Residents/Applicants'}
+keywords = {'Former applicant', 'Future Residents/Applicants', 'Applicant'}
 
 def recent_leases(unit_data, as_of_date_str):
     if as_of_date_str == 'Date not found':
