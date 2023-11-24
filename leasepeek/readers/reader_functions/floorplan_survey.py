@@ -56,5 +56,5 @@ def floorplan_survey(data):
     # for i, plan in enumerate(floorplans):
     #     print(f"07_TEST_FILE_FLOORPLAN_{i+1} = '{plan}'")
         
-    # Convert defaultdict back to dicfor the return value
+    # Convert defaultdict back to dic for the return value
     return dict(floorplans)
