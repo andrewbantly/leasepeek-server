@@ -15,8 +15,8 @@ Variables:
 # Set of keywords used to identify units with non-explicit statuses that require further classification.
 combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
 occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL', 'O', 'NR', 'NU'}
-vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased', 'VU', 'VR'}
-down_unit_keywords = {'down'}
+vacant_keywords = {'vacant', 'Vacant-Leased', 'VU', 'VR'}
+down_unit_keywords = {'down'} 
 model_unit_keywords = {'model'}
 ignore_keywords = {'Former resident', 'Former applicant'}
 
@@ -51,6 +51,7 @@ def vacancy(unit_data):
         if unit['status'] in combined_vacancy_keywords:
             # If the status indicates future residents or applicants, increment the 'Applicant' count.
             if unit['status'] ==  "Future Residents/Applicants":
+                unit['status'] = 'Applicant'
                 if 'Applicant' in vacancy_statuses:
                     vacancy_statuses['Applicant'] += 1
                 else:
@@ -58,24 +59,28 @@ def vacancy(unit_data):
             else:
                 # If the tenant field contains 'vacant', increment the 'Vacant' count.
                 if 'vacant' in unit['tenant'].lower():
+                    unit['status'] = 'Vacant'
                     if 'Vacant' in vacancy_statuses:
                         vacancy_statuses['Vacant'] += 1
                     else:
                         vacancy_statuses['Vacant'] = 1
                 # If there's a model unit, increment the 'Model' count.
                 elif unit['tenant'].lower() in model_unit_keywords:
+                    unit['status'] = 'Model'
                     if 'Model' in vacancy_statuses:
                         vacancy_statuses['Model'] += 1
                     else:
                         vacancy_statuses['Model'] = 1
                 # If there's a down unit, increment the 'Down' count.
                 elif unit['tenant'].lower() in down_unit_keywords:
+                    unit['status'] = 'Down'
                     if 'Down' in vacancy_statuses:
                         vacancy_statuses['Down'] += 1
                     else:
                         vacancy_statuses['Down'] = 1
                 # If none of the above, the unit is considered 'Occupied'.
                 else:
+                    unit['status'] = 'Occupied'
                     if 'Occupied' in vacancy_statuses:
                         vacancy_statuses['Occupied'] += 1
                     else:
@@ -84,12 +89,14 @@ def vacancy(unit_data):
         # Handle units with explicit statuses.
         elif unit['status']:
             if unit['status'] in occupied_keywords:
+                unit['status'] = 'Occupied'
             # Increment the count for the unit's status.
                 if 'Occupied' in vacancy_statuses:
                     vacancy_statuses['Occupied'] += 1
                 else:
                     vacancy_statuses['Occupied'] = 1
             elif unit['status'] in vacant_keywords:
+                unit['status'] = 'Vacant'
                 if 'Vacant' in vacancy_statuses:
                     vacancy_statuses['Vacant'] += 1
                 else:
@@ -104,8 +111,32 @@ def vacancy(unit_data):
                     
         # For units without a status, check if 'vacant' is mentioned in the 'tenant' field.
         else:
-            if 'vacant' in unit['tenant'].lower():
-                vacants += 1
+            if any(keyword in 'vacant' in unit['tenant'].lower() for keyword in vacant_keywords):
+                unit['status'] = 'Vacant'
+                if 'Vacant' in vacancy_statuses:
+                    vacancy_statuses['Vacant'] += 1
+                else:
+                    vacancy_statuses['Vacant'] = 1
+            elif any(keyword in unit['tenant'].lower() for keyword in model_unit_keywords):
+                unit['status'] = 'Model'
+                if 'Model' in vacancy_statuses:
+                    vacancy_statuses['Model'] += 1
+                else:
+                    vacancy_statuses['Model'] = 1
+            # If there's a down unit, increment the 'Down' count.
+            elif unit['tenant'].lower() in down_unit_keywords:
+                unit['status'] = 'Down'
+                if 'Down' in vacancy_statuses:
+                    vacancy_statuses['Down'] += 1
+                else:
+                    vacancy_statuses['Down'] = 1
+            # If none of the above, the unit is considered 'Occupied'.
+            else:
+                unit['status'] = 'Occupied'
+                if 'Occupied' in vacancy_statuses:
+                    vacancy_statuses['Occupied'] += 1
+                else:
+                    vacancy_statuses['Occupied'] = 1
 
     # Compile the final vacancy report.
     if vacancy_statuses:
