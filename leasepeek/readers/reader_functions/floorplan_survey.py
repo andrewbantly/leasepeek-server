@@ -2,7 +2,7 @@
 from collections import defaultdict
 
 status_keywords = {'upcoming', 'approved', 'Future Residents/Applicants', 'Applicant', 'Pending renewal', 'Former resident', 'Former applicant'}
-occupied_keywords = {'Occupied', 'occupied'}
+occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL', 'O', 'NR', 'NU'}
 
 def floorplan_survey(data):
     # Initialize floor plans dictionary that will be returned using defaultdict
