@@ -8,6 +8,12 @@ def recent_leases(unit_data, as_of_date_str):
     else:
         as_of_date = datetime.strptime(as_of_date_str, '%m/%d/%Y')
 
+    date_180_days_ago = as_of_date - timedelta(days=180)
+    # print(f"90 days ago is: {date_180_days_ago}")
+    date_150_days_ago = as_of_date - timedelta(days=150)
+    # print(f"90 days ago is: {date_150_days_ago}")
+    date_120_days_ago = as_of_date - timedelta(days=120)
+    # print(f"90 days ago is: {date_120_days_ago}")
     date_90_days_ago = as_of_date - timedelta(days=90)
     # print(f"90 days ago is: {date_90_days_ago}")
     date_60_days_ago = as_of_date - timedelta(days=60)
@@ -17,6 +23,9 @@ def recent_leases(unit_data, as_of_date_str):
 
     recent_two = {}
     recent_time_windows = {
+        'last_180_days': {},
+        'last_150_days': {},
+        'last_120_days': {},
         'last_90_days': {},
         'last_60_days': {},
         'last_30_days': {}
@@ -35,6 +44,9 @@ def recent_leases(unit_data, as_of_date_str):
                     'average_rent': 0
                 },
                 'recent_leases': {
+                    'last_180_days': {'count': 0, 'total_rent': 0, 'average_rent': 0},
+                    'last_150_days': {'count': 0, 'total_rent': 0, 'average_rent': 0},
+                    'last_120_days': {'count': 0, 'total_rent': 0, 'average_rent': 0},
                     'last_90_days': {'count': 0, 'total_rent': 0, 'average_rent': 0},
                     'last_60_days': {'count': 0, 'total_rent': 0, 'average_rent': 0},
                     'last_30_days': {'count': 0, 'total_rent': 0, 'average_rent': 0}
@@ -69,6 +81,9 @@ def recent_leases(unit_data, as_of_date_str):
 
             for window in recent_time_windows.keys():
                 start_date = {
+                    'last_180_days': date_180_days_ago,
+                    'last_150_days': date_150_days_ago,
+                    'last_120_days': date_120_days_ago,
                     'last_90_days': date_90_days_ago,
                     'last_60_days': date_60_days_ago,
                     'last_30_days': date_30_days_ago
