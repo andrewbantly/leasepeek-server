@@ -41,8 +41,6 @@ def floorplan_survey(data):
             else:
                 status_count[status] = 1
 
-        
-
         floorplans[plan] = {
             'avgRent': avg_rent,
             'sumRent': rent_sum,
