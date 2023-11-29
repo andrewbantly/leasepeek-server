@@ -32,6 +32,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 	"""
 	serializer_class = CustomTokenObtainPairSerializer
 
+
 ##### USERS
 class RegisterUserView(APIView):
 	"""
@@ -172,7 +173,7 @@ def read_user_data(request):
 		return Response({"data": [], "message": "No building data found."}, status=status.HTTP_404_NOT_FOUND)
 	else:
 		# If there is at least one document, process the cursor
-		basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits']
+		basic_data = ['location', 'date', 'asOf', 'vacancy', 'floorplans', 'totalUnits', 'totalBalance', 'lossToLease']
 		results = []
 		for item in cursor:
 			data_item = {k: item[k] for k in basic_data if k in item}
@@ -219,7 +220,6 @@ def read_excel_data(request):
 	except Exception as e:
 		logger.error("Error retrieving data for ObjectId: %s", object_id)
 	return JsonResponse({"message": "Error retrieving data."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 
 @api_view(['DELETE'])
