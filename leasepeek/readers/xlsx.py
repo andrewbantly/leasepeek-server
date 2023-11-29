@@ -29,6 +29,7 @@ from leasepeek.readers.reader_functions.loss_to_lease import find_loss_to_lease
 from leasepeek.readers.reader_functions.expiring_leases import expiring_leases
 from leasepeek.readers.reader_functions.recent_leases import recent_leases
 from leasepeek.readers.reader_functions.lease_trends import analyze_lease_trends
+from leasepeek.readers.reader_functions.outstandingBalance import calculate_outstanding_balance
 from leasepeek.readers.reader_functions.filter_personal_information import filter_personal_info
 from datetime import datetime, timezone
 
@@ -66,6 +67,9 @@ def read_xlsx(data_frame, user_id, file_name):
     # Calculate the total number of units from the cleaned data
     total_units = find_total_units(cleaned_unit_data)    
 
+    # Calculate the total outstanding balance from the cleaned data
+    outstanding_balance = calculate_outstanding_balance(cleaned_unit_data)
+
     # Calculate vacancy metrics based on the cleaned unit data
     vacancy_data = vacancy(cleaned_unit_data)
 
@@ -93,6 +97,7 @@ def read_xlsx(data_frame, user_id, file_name):
                  'location': property,
                  'asOf': as_of_date,
                  'totalUnits': total_units,
+                 'totalBalance': outstanding_balance,
                  'floorplans': surveyed_floorplans,
                  'vacancy': vacancy_data,
                  'lossToLease': loss_to_lease,

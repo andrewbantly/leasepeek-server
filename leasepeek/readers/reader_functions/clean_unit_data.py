@@ -13,6 +13,7 @@ Variables:
     unit_keywords, address_keywords, floorplan_keywords, ... , charge_codes, negative_charge_codes: Sets of keywords and codes used for data categorization and identification during the cleaning process.
 """
 from datetime import datetime
+from decimal import Decimal
 
 # Sets of keyword groupings used to classify data from an input source. Each list contains variations or possible headings found in the dataset that represent the same type of information
 unit_keywords = {'Unit', 'Bldg/Unit', 'Unit Number'}
@@ -189,7 +190,7 @@ def clean_unit_data(data_array):
                 cleaned_entry[category] = value
 
             # If the key belongs to categories related to monetary values, perform additional cleaning and conversion.
-            elif category in ['rent', 'total', 'market', 'balance', 'residentDeposit', 'otherDeposit', 'sqft']:
+            elif category in ['rent', 'total', 'market', 'residentDeposit', 'otherDeposit', 'sqft']:
                 # If the value is a string, clean it by removing certain characters and whitespace, then attempt to convert it to an integer.
                 if isinstance(value, str):
                     value = value.replace('*', '').replace(',', '').strip()
@@ -204,6 +205,16 @@ def clean_unit_data(data_array):
                 else:
                     cleaned_entry[category] = value
 
+            # If the key belongs to categories related to monetary values with fixed-point arithmetic, perform additional cleaning and conversion
+            elif category in ['balance']:
+                if isinstance(value, str):
+                    value = value.replace('*', '').replace(',', '').strip()   
+                if value == '':
+                    cleaned_entry[category] = 0
+                else:
+                    value = Decimal(value)
+                    cleaned_entry[category] = value
+                
             # Process entries categorized as 'charges'.
             elif category == 'charges':
                 # Check if the value associated with the charge is a string.
@@ -222,7 +233,6 @@ def clean_unit_data(data_array):
                     value = -abs(value)
                 # Append a new dictionary to the 'charges' list in the cleaned_entry. 
                 cleaned_entry['charges'].append({'code': key, 'value': value})
-
             
             # If the key indicates lease dates (two dates in a single string) and the value has a specific length (21 = MM/DD/YYYY + ' ' + MM/DD/YYYY), split the value into separate 'leaseStart' and 'leaseExpire' dates.
             elif category == 'leaseDates':
