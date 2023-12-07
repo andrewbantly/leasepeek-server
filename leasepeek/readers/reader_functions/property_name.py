@@ -45,14 +45,14 @@ def find_property_name(df, title_row):
             break
     
     location = {
-        'market': None,
+        'market': '',
         'address': {
-            'addressLine1': None,
-            'addressLine2': None,
-            'postalCode': None,
-            'city': None,
-            'state': None,
-            'country': None,
+            'addressLine1': '',
+            'addressLine2': '',
+            'postalCode': '',
+            'city': '',
+            'state': '',
+            'country': '',
         },
         'building': property_name
     }
