@@ -34,10 +34,9 @@ resident_deposit_keywords = {'Resident Deposit', 'Deposit', 'Dep On Hand'}
 other_deposit_keywords = {'Other Deposit'}
 balance_keywords = {'Balance', 'Resident Balance', 'Past Due'}
 total_keywords = {'Total', 'Total Billing'}
-NSF_keywords = {'NSF Count'}
 
 # Sets of charge codes, including those that are specifically for negative values
-charge_codes = {'rub', 'valtsh', 'cmf', 'package', 'pst', 'prk', 'covpark', 'bbpest', 'conciere', 'bbtr', 'zero', 'ptr', 'CNSVCpst', 'mtm', 'rubsew', 'emp', 'petf', 'conc-prk', 'insur', 'stor', 'svcanml', 'conc-lmp', 'conc-sto', 'Utility', 'Utility Recapture', 'TECH', 'PETF', 'CONC', 'STOR', 'EMPL', 'MODL', 'OFCR', 'LTOR-Loss To Lease In Force', 'STOR-Storage Space #', 'CABL-Cable Television Charges', 'INTR-Internet Access', 'PARK-Parking', 'MTOM-Month To Month Charges', 'RLL-PDLW', 'LTOL-Loss To Lease In Force', 'GAR-Garage Rental', 'RLLG-PDLW LEGACY', 'PETR-Pet Rent', 'W/D Washer/Dryer Rental Charges', 'VAC -Vacancy Loss', 'GTOL-Gain To Lease In Force', 'GTOR-Gain To Lease In Force', 'W/D-Washer/Dryer Rental Charges', 'PETF-Pet Fees Or Charges', 'GAR-Garage Rental #', 'MODE-Model', 'park', 'mtmf', 'conc-rec'}
+charge_codes = {'rub', 'valtsh', 'cmf', 'package', 'pst', 'prk', 'covpark', 'bbpest', 'conciere', 'bbtr', 'zero', 'ptr', 'CNSVCpst', 'mtm', 'rubsew', 'emp', 'petf', 'conc-prk', 'insur', 'stor', 'svcanml', 'conc-lmp', 'conc-sto', 'Utility', 'Utility Recapture', 'TECH', 'PETF', 'CONC', 'STOR', 'EMPL', 'MODL', 'OFCR', 'LTOR-Loss To Lease In Force', 'STOR-Storage Space #', 'CABL-Cable Television Charges', 'INTR-Internet Access', 'PARK-Parking', 'MTOM-Month To Month Charges', 'RLL-PDLW', 'LTOL-Loss To Lease In Force', 'GAR-Garage Rental', 'RLLG-PDLW LEGACY', 'PETR-Pet Rent', 'W/D Washer/Dryer Rental Charges', 'VAC -Vacancy Loss', 'GTOL-Gain To Lease In Force', 'GTOR-Gain To Lease In Force', 'W/D-Washer/Dryer Rental Charges', 'PETF-Pet Fees Or Charges', 'GAR-Garage Rental #', 'MODE-Model', 'park', 'mtmf', 'conc-rec', 'gar', 'petp', 'empl'}
 negative_charge_codes = {'MODE-Model', 'LTOL-Loss To Lease In Force', 'VAC -Vacancy Loss'}
 vacancy_loss_charge_codes = {'VAC -Vacancy Loss'}
 model_loss_charge_codes = {'MODE-Model'}
@@ -129,10 +128,6 @@ def classify_key(key):
     elif any(keyword == key for keyword in charge_codes):
         return 'charges'
     
-    # Check if the key matches any of the 'NSF' keywords.
-    elif any(keyword == key for keyword in NSF_keywords):
-        return 'nsf'
-    
     # If the key doesn't match any category, classify as 'unclassified'.
     else:
         return 'unclassified'
@@ -175,7 +170,7 @@ def clean_unit_data(data_array):
             'otherDeposit': 0,
             'balance': 0,
             'total': 0,
-            'nsf': None,
+            'renovated': False,
             'charges': [],
             'unclassified': {}
         }
@@ -186,7 +181,7 @@ def clean_unit_data(data_array):
             category = classify_key(key)
 
             # If the key belongs to certain predefined categories, assign the value to the corresponding field in the cleaned_entry.
-            if category in {'unit', 'address', 'floorplan', 'tenant', 'residentId', 'status', 'moveIn', 'moveOut', 'leaseStart','leaseExpire','nsf'}:
+            if category in {'unit', 'address', 'floorplan', 'tenant', 'residentId', 'status', 'moveIn', 'moveOut', 'leaseStart','leaseExpire'}:
                 cleaned_entry[category] = value
 
             # If the key belongs to categories related to monetary values, perform additional cleaning and conversion.
@@ -221,9 +216,9 @@ def clean_unit_data(data_array):
                 if isinstance(value, str):
                     # Remove any '*' or ',' characters and strip whitespace, as these can interfere with numerical conversion.
                     value = value.replace('*', '').replace(',', '').strip()
-                    # Attempt to convert the cleaned string to a float, then to an integer (after rounding), as charge data is expected to be numerical.
+                    # Attempt to convert the cleaned string to a float
                     try:
-                        value = int(round(float(value)))
+                        value = float(value)
                     except ValueError:
                         # If the conversion fails (e.g., if the string contains non-numeric characters), log an error message and retain the original string value.
                         print(f"Error converting '{value}' to integer for key '{key}'. Using raw value.")
@@ -232,7 +227,7 @@ def clean_unit_data(data_array):
                     # Ensure the value is stored as a negative number.
                     value = -abs(value)
                 # Append a new dictionary to the 'charges' list in the cleaned_entry. 
-                cleaned_entry['charges'].append({'code': key, 'value': value})
+                cleaned_entry['charges'].append({'code': key, 'value': value, 'type': ''})
             
             # If the key indicates lease dates (two dates in a single string) and the value has a specific length (21 = MM/DD/YYYY + ' ' + MM/DD/YYYY), split the value into separate 'leaseStart' and 'leaseExpire' dates.
             elif category == 'leaseDates':
@@ -248,7 +243,6 @@ def clean_unit_data(data_array):
 
         for charge in cleaned_entry.get('charges', []):
             if charge['code'] in vacancy_loss_charge_codes:
-                # Subtract the charge value from the rent
                 cleaned_entry['rent'] += charge['value']
             elif charge['code'] in model_loss_charge_codes:
                 cleaned_entry['rent'] += charge['value']
