@@ -15,9 +15,10 @@ Variables:
 # Set of keywords used to identify units with non-explicit statuses that require further classification.
 combined_vacancy_keywords =  {"Current/Notice/Vacant Residents",  "Future Residents/Applicants"}
 occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL', 'O', 'NR', 'NU'}
-vacant_keywords = {'vacant', 'Vacant-Leased', 'VU', 'VR'}
-down_unit_keywords = {'down'} 
-model_unit_keywords = {'model'}
+vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased', 'VU', 'VR'}
+down_unit_keywords = {'Down', 'down'} 
+model_unit_keywords = {'Model', 'model'}
+future_resident_keywords = {'Applicant', 'applicant','upcoming'}
 ignore_keywords = {'Former resident', 'Former applicant'}
 
 def vacancy(unit_data):
@@ -149,13 +150,25 @@ def vacancy(unit_data):
                     vacancy_statuses['Occupied'] += 1
                 else:
                     vacancy_statuses['Occupied'] = 1
-
+    
+    vacancy_data = {}
     # Compile the final vacancy report.
     if vacancy_statuses:
-        vacancy_data = vacancy_statuses
+        for status, value in vacancy_statuses.items():
+            if status in occupied_keywords: 
+                status_type = 'occupied'
+            elif status in vacant_keywords:
+                status_type = 'vacant'
+            elif status in model_unit_keywords or status in down_unit_keywords:
+                status_type = 'nonRevenue'
+            elif status in future_resident_keywords:
+                status_type = 'futureResident'
+            else: 
+                status_type = ''
+            vacancy_data[status] = {'count': value, 'type': status_type}
     else: 
         # If there was no status data, report based on 'vacant' counts.
         occupied = total_units - vacants
-        vacancy_data = {"Vacant": vacants, "Occupied": occupied}
+        vacancy_data = {"Vacant": {'count': vacants, 'type': 'vacant'}, "Occupied": {'count': occupied, 'type': 'occupied'}}
 
     return vacancy_data
