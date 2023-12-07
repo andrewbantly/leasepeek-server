@@ -49,6 +49,10 @@ def floorplan_survey(data):
             'unitCount': plan_count,
             'avgSqft': avg_sqft,
             'unitStatuses': status_count,
+            'planName': plan,
+            'planType': 'residential',
+            'beds': 0,
+            'baths': 0,
         }
 
     # for i, plan in enumerate(floorplans):
