@@ -156,6 +156,17 @@ def process_excel_data(request):
 	return JsonResponse({"message": "No file was included in the request."}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['PUT'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def update_excel_data(request):
+	print()
+	print("#### UPDATE DATA REQUEST")
+	print(request.body)
+	print()
+	return JsonResponse({"message": "Updated Rent Roll Data."}, status=status.HTTP_200_OK)
+	
+
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
