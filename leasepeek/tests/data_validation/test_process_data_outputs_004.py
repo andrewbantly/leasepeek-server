@@ -57,7 +57,7 @@ class ProcessDataViewValuesTest(APITestCase):
 
 
         self.assertEqual(response_data['asOf'], os.environ.get('04_TEST_FILE_AS_OF'))
-        self.assertEqual(response_data['location'], os.environ.get('04_TEST_FILE_LOCATION'))
+        self.assertEqual(response_data['location']['building'], os.environ.get('04_TEST_FILE_LOCATION'))
         self.assertEqual(response_data['totalUnits'], 324)
         self.assertEqual(response_data['totalBalance'], -4817.10)
         
