@@ -63,9 +63,9 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['totalUnits'], 300)
         self.assertEqual(response_data['totalBalance'], -2838.75)
 
-        self.assertEqual(response_data['vacancy']['Occupied'], 275)
-        self.assertEqual(response_data['vacancy']['Vacant'], 24)
-        self.assertEqual(response_data['vacancy']['Model'], 1)
+        self.assertEqual(response_data['vacancy']['Occupied']['count'], 275)
+        self.assertEqual(response_data['vacancy']['Vacant']['count'], 24)
+        self.assertEqual(response_data['vacancy']['Model']['count'], 1)
        
         self.assertEqual(response_data['lossToLease']['marketSum'], 504484)
         self.assertEqual(response_data['lossToLease']['rentIncome'], 405967)
