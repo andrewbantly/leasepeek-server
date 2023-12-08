@@ -56,8 +56,9 @@ class ProcessDataViewValuesTest(APITestCase):
         response_data = json.loads(response.content)[0]
 
         self.assertEqual(response_data['asOf'], os.environ.get('01_TEST_FILE_AS_OF'))
-        self.assertEqual(response_data['location']['building'], os.environ.get('01_TEST_FILE_LOCATION'))
+        self.assertEqual(response_data['location']['buildingName'], os.environ.get('01_TEST_FILE_LOCATION'))
         self.assertEqual(response_data['totalUnits'], 15)
+        self.assertEqual(response_data['unitsConfirmed'], False)
         self.assertEqual(response_data['totalBalance'], -2419.23)
 
         self.assertEqual(response_data['vacancy']['Occupied']['count'], 6)

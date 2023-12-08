@@ -59,8 +59,9 @@ class ProcessDataViewValuesTest(APITestCase):
         days_30 = 'last_30_days'
 
         self.assertEqual(response_data['asOf'], os.environ.get('02_TEST_FILE_AS_OF'))
-        self.assertEqual(response_data['location']['building'], os.environ.get('02_TEST_FILE_LOCATION'))
+        self.assertEqual(response_data['location']['buildingName'], os.environ.get('02_TEST_FILE_LOCATION'))
         self.assertEqual(response_data['totalUnits'], 300)
+        self.assertEqual(response_data['unitsConfirmed'], False)
         self.assertEqual(response_data['totalBalance'], -2838.75)
 
         self.assertEqual(response_data['vacancy']['Occupied']['count'], 275)
