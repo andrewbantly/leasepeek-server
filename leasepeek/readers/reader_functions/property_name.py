@@ -49,12 +49,11 @@ def find_property_name(df, title_row):
         'address': {
             'addressLine1': '',
             'addressLine2': '',
-            'postalCode': '',
             'city': '',
             'state': '',
-            'country': '',
+            'zipCode': '',
         },
-        'building': property_name
+        'buildingName': property_name
     }
 
     return location
