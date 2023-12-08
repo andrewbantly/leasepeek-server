@@ -18,7 +18,7 @@ occupied_keywords = {'Occupied', 'occupied', 'Occupied-NTV', 'Occupied-NTVL', 'O
 vacant_keywords = {'Vacant', 'vacant', 'Vacant-Leased', 'VU', 'VR'}
 down_unit_keywords = {'Down', 'down'} 
 model_unit_keywords = {'Model', 'model'}
-future_resident_keywords = {'Applicant', 'applicant','upcoming'}
+future_resident_keywords = {'Applicant', 'applicant', 'upcoming'}
 ignore_keywords = {'Former resident', 'Former applicant'}
 
 def vacancy(unit_data):
