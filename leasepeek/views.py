@@ -162,20 +162,19 @@ def process_excel_data(request):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def update_excel_data(request):
+	logger.info("Update Rent Roll Data request recieved.")
 	try:
-		# Parse the JSON data from request.body
 		data = json.loads(request.body.decode('utf-8'))
 		form_type = data.get('form')
 		match form_type:
 			case 'basic':
-				update_basic_data(data)
-				
-
-		return JsonResponse({'status': 'success', 'message': 'Data processed successfully'})
-
+				response_message = update_basic_data(data)
+				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
 	except json.JSONDecodeError:
-		return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-	
+		return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
+	except Exception as e:
+		logger.error(f"Error processing request: {e}")
+		return JsonResponse({'status': 'error', 'message': 'Error processing request'}, status=500)
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
