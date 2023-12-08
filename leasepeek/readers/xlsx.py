@@ -97,6 +97,7 @@ def read_xlsx(data_frame, user_id, file_name):
                  'location': property,
                  'asOf': as_of_date,
                  'totalUnits': total_units,
+                 'unitsConfirmed': False,
                  'totalBalance': outstanding_balance,
                  'floorplans': surveyed_floorplans,
                  'vacancy': vacancy_data,
