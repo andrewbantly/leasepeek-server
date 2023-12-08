@@ -1,6 +1,7 @@
 import os
 import json
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -12,6 +13,7 @@ class ProcessDataViewValuesTest(APITestCase):
         self.process_data_url = reverse('process_data')
         self.login_url = reverse('login')
         self.read_data_url = reverse('read_data')
+        self.update_data_url = reverse('update_data')
 
         # Get the User model
         self.User = get_user_model()
@@ -261,7 +263,35 @@ class ProcessDataViewValuesTest(APITestCase):
         self.assertEqual(response_data['recentLeases'][floorplan10]['recent_leases'][days_30]['total_rent'], 1800)
         self.assertEqual(response_data['recentLeases'][floorplan10]['recent_leases'][days_30]['average_rent'], 1800)
 
+    # Test vupdate data with valid credentials
+    def test_update_data(self):
+        file_name = os.environ.get('03_TEST_FILE_NAME')
+        objectId = self.upload_test_file(file_name)
 
+        asOf = os.environ.get('03_TEST_FILE_AS_OF')
+        buildingName = os.environ.get('03_TEST_FILE_BUILDING_NAME')
+        market = os.environ.get('03_TEST_FILE_MARKET')
+        addressLine1 = os.environ.get('03_TEST_FILE_ADDRESS_LINE_1')
+        city = os.environ.get('03_TEST_FILE_CITY')
+        state = os.environ.get('03_TEST_FILE_STATE')
+        zipCode = os.environ.get('03_TEST_FILE_ZIPCODE')
+
+        form = {
+            'objectId': objectId,
+            'form': 'basic',
+            'asOf': asOf,
+            'buildingName': buildingName,
+            'market': market,
+            'addressLine1': addressLine1,
+            'addressLine2': '',
+            'city': city,
+            'state': state,
+            'zipCode': zipCode,
+            'unitsConfirmed': True,
+        }
+        response = self.client.put(self.update_data_url, data=json.dumps(form), content_type='application/json', HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 
