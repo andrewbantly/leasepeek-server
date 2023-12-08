@@ -21,6 +21,8 @@ from bson.objectid import ObjectId
 from bson.errors import InvalidId
 import pandas as pd
 import logging
+import json
+from leasepeek.data_updaters.basic_data_updates import update_basic_data
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -160,11 +162,19 @@ def process_excel_data(request):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def update_excel_data(request):
-	print()
-	print("#### UPDATE DATA REQUEST")
-	print(request.body)
-	print()
-	return JsonResponse({"message": "Updated Rent Roll Data."}, status=status.HTTP_200_OK)
+	try:
+		# Parse the JSON data from request.body
+		data = json.loads(request.body.decode('utf-8'))
+		form_type = data.get('form')
+		match form_type:
+			case 'basic':
+				update_basic_data(data)
+				
+
+		return JsonResponse({'status': 'success', 'message': 'Data processed successfully'})
+
+	except json.JSONDecodeError:
+		return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 	
 
 @api_view(['GET'])
