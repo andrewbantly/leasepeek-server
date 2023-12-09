@@ -227,7 +227,7 @@ def clean_unit_data(data_array):
                     # Ensure the value is stored as a negative number.
                     value = -abs(value)
                 # Append a new dictionary to the 'charges' list in the cleaned_entry. 
-                cleaned_entry['charges'].append({'code': key, 'value': value, 'type': ''})
+                cleaned_entry['charges'].append({'code': key, 'value': value})
             
             # If the key indicates lease dates (two dates in a single string) and the value has a specific length (21 = MM/DD/YYYY + ' ' + MM/DD/YYYY), split the value into separate 'leaseStart' and 'leaseExpire' dates.
             elif category == 'leaseDates':
