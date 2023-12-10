@@ -53,6 +53,7 @@ def floorplan_survey(data):
             'planType': 'residential',
             'beds': "0",
             'baths': "0",
+            "renovated": False,
         }
 
     # for i, plan in enumerate(floorplans):

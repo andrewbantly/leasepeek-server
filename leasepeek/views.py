@@ -182,6 +182,9 @@ def update_excel_data(request):
 			case 'chargeCodes':
 				response_message = update_charge_code_types(data)
 				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
+			case 'renovations':
+				response_message = 'success'
+				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
 	except json.JSONDecodeError:
 		return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
 	except Exception as e:

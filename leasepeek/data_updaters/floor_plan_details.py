@@ -21,6 +21,7 @@ def update_floor_plan_data(data):
             'planType': plan['planType'],
             'beds': plan['beds'],
             'baths': plan['baths'],
+            'renovated': plan['renovated'],
         }
         
     update_query = {
