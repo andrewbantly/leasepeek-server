@@ -26,6 +26,7 @@ from leasepeek.data_updaters.basic_data_updates import update_basic_data
 from leasepeek.data_updaters.floor_plan_details import update_floor_plan_data
 from leasepeek.data_updaters.update_unit_statuses import update_unit_statuses
 from leasepeek.data_updaters.charge_code_types import update_charge_code_types
+from leasepeek.data_updaters.renovations import update_renovations_data
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -183,7 +184,7 @@ def update_excel_data(request):
 				response_message = update_charge_code_types(data)
 				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
 			case 'renovations':
-				response_message = 'success'
+				response_message = update_renovations_data(data)
 				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
 	except json.JSONDecodeError:
 		return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
