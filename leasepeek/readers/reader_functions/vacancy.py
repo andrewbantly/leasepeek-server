@@ -88,6 +88,58 @@ def vacancy(unit_data):
                         vacancy_statuses['Occupied'] = 1
         
         # Handle units with explicit statuses.
+        elif unit['status'] and unit['tenant']:
+            if any(keyword in 'vacant' in unit['tenant'].lower() for keyword in vacant_keywords):
+                unit['status'] = 'vacant'
+                if 'Vacant' in vacancy_statuses:
+                    vacancy_statuses['Vacant'] += 1
+                else:
+                    vacancy_statuses['Vacant'] = 1
+            elif any(keyword in unit['tenant'].lower() for keyword in model_unit_keywords):
+                unit['status'] = 'model'
+                if 'Model' in vacancy_statuses:
+                    vacancy_statuses['Model'] += 1
+                else:
+                    vacancy_statuses['Model'] = 1
+            elif unit['tenant'].lower() in down_unit_keywords:
+                unit['status'] = 'down'
+                if 'Down' in vacancy_statuses:
+                    vacancy_statuses['Down'] += 1
+                else:
+                    vacancy_statuses['Down'] = 1
+            else:
+                if unit['status'] in occupied_keywords:
+                    unit['status'] = 'occupied'
+                # Increment the count for the unit's status.
+                    if 'Occupied' in vacancy_statuses:
+                        vacancy_statuses['Occupied'] += 1
+                    else:
+                        vacancy_statuses['Occupied'] = 1
+                elif unit['status'] in vacant_keywords:
+                    unit['status'] = 'vacant'
+                    if 'Vacant' in vacancy_statuses:
+                        vacancy_statuses['Vacant'] += 1
+                    else:
+                        vacancy_statuses['Vacant'] = 1
+                elif unit['status'] in model_unit_keywords:
+                    unit['status'] = 'model'
+                    if 'Model' in vacancy_statuses:
+                        vacancy_statuses['Model'] += 1
+                    else:
+                        vacancy_statuses['Model'] = 1
+                elif unit['status'] in down_unit_keywords:
+                    unit['status'] = 'down'
+                    if 'Down' in vacancy_statuses:
+                        vacancy_statuses['Down'] += 1
+                    else:
+                        vacancy_statuses['Down'] = 1
+                elif unit['status'] in ignore_keywords:
+                    continue
+                else:
+                    if unit['status'] in vacancy_statuses:
+                        vacancy_statuses[unit['status']] += 1
+                    else:
+                        vacancy_statuses[unit['status']] = 1
         elif unit['status']:
             if unit['status'] in occupied_keywords:
                 unit['status'] = 'occupied'
@@ -121,7 +173,6 @@ def vacancy(unit_data):
                     vacancy_statuses[unit['status']] += 1
                 else:
                     vacancy_statuses[unit['status']] = 1
-                    
         # For units without a status, check if 'vacant' is mentioned in the 'tenant' field.
         else:
             if any(keyword in 'vacant' in unit['tenant'].lower() for keyword in vacant_keywords):
