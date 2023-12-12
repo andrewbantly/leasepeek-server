@@ -26,6 +26,7 @@ from leasepeek.readers.reader_functions.vacancy import vacancy
 from leasepeek.readers.reader_functions.total_units import find_total_units
 from leasepeek.readers.reader_functions.floorplan_survey import floorplan_survey
 from leasepeek.readers.reader_functions.loss_to_lease import find_loss_to_lease
+from leasepeek.readers.reader_functions.charges import charge_codes
 from leasepeek.readers.reader_functions.expiring_leases import expiring_leases
 from leasepeek.readers.reader_functions.recent_leases import recent_leases
 from leasepeek.readers.reader_functions.lease_trends import analyze_lease_trends
@@ -79,6 +80,9 @@ def read_xlsx(data_frame, user_id, file_name):
     # Calculate loss to lease using the cleaned unit data
     loss_to_lease = find_loss_to_lease(cleaned_unit_data)
 
+    # Charge codes
+    charges = charge_codes(cleaned_unit_data, loss_to_lease)
+
     # Recent lease signing analysis
     recent_leases_analysis = recent_leases(cleaned_unit_data, as_of_date)
 
@@ -97,10 +101,12 @@ def read_xlsx(data_frame, user_id, file_name):
                  'location': property,
                  'asOf': as_of_date,
                  'totalUnits': total_units,
+                 'unitsConfirmed': False,
                  'totalBalance': outstanding_balance,
                  'floorplans': surveyed_floorplans,
                  'vacancy': vacancy_data,
                  'lossToLease': loss_to_lease,
+                 'charges': charges,
                  'recentLeases': recent_leases_analysis,
                  'expiringLeases': expired_leases,
                  'leaseTrends': lease_trends,

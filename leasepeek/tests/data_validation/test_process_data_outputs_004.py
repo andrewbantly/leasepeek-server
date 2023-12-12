@@ -57,14 +57,15 @@ class ProcessDataViewValuesTest(APITestCase):
 
 
         self.assertEqual(response_data['asOf'], os.environ.get('04_TEST_FILE_AS_OF'))
-        self.assertEqual(response_data['location'], os.environ.get('04_TEST_FILE_LOCATION'))
+        self.assertEqual(response_data['location']['buildingName'], os.environ.get('04_TEST_FILE_LOCATION'))
         self.assertEqual(response_data['totalUnits'], 324)
+        self.assertEqual(response_data['unitsConfirmed'], False)
         self.assertEqual(response_data['totalBalance'], -4817.10)
         
-        self.assertEqual(response_data['vacancy']['Occupied'], 260)
-        self.assertEqual(response_data['vacancy']['Vacant'], 64)
-        self.assertEqual(response_data['vacancy']['Applicant'], 16)
-        self.assertEqual(response_data['vacancy']['Pending renewal'], 3)
+        self.assertEqual(response_data['vacancy']['Occupied']['count'], 260)
+        self.assertEqual(response_data['vacancy']['Vacant']['count'], 64)
+        self.assertEqual(response_data['vacancy']['Applicant']['count'], 16)
+        self.assertEqual(response_data['vacancy']['Pending renewal']['count'], 3)
        
         self.assertEqual(response_data['lossToLease']['marketSum'], 560385)
         self.assertEqual(response_data['lossToLease']['rentIncome'], 401055)

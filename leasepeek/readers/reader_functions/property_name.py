@@ -43,5 +43,17 @@ def find_property_name(df, title_row):
         if any(keyword in row_str for keyword in keywords):
             property_name = row_str
             break
+    
+    location = {
+        'market': '',
+        'address': {
+            'addressLine1': '',
+            'addressLine2': '',
+            'city': '',
+            'state': '',
+            'zipCode': '',
+        },
+        'buildingName': property_name
+    }
 
-    return property_name
+    return location

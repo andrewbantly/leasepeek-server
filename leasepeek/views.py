@@ -21,6 +21,12 @@ from bson.objectid import ObjectId
 from bson.errors import InvalidId
 import pandas as pd
 import logging
+import json
+from leasepeek.data_updaters.basic_data_updates import update_basic_data
+from leasepeek.data_updaters.floor_plan_details import update_floor_plan_data
+from leasepeek.data_updaters.update_unit_statuses import update_unit_statuses
+from leasepeek.data_updaters.charge_code_types import update_charge_code_types
+from leasepeek.data_updaters.renovations import update_renovations_data
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -155,6 +161,36 @@ def process_excel_data(request):
 	logger.warning(f"User {request.user.username} made a process data request without a file.")
 	return JsonResponse({"message": "No file was included in the request."}, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['PUT'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def update_excel_data(request):
+	logger.info("Update Rent Roll Data request recieved.")
+	try:
+		data = json.loads(request.body.decode('utf-8'))
+		form_type = data.get('form')
+		match form_type:
+			case 'basic':
+				response_message = update_basic_data(data)
+				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
+			case 'floorPlanDetails':
+				response_message = update_floor_plan_data(data)
+				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
+			case 'unitStatus':
+				response_message = update_unit_statuses(data)
+				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
+			case 'chargeCodes':
+				response_message = update_charge_code_types(data)
+				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
+			case 'renovations':
+				response_message = update_renovations_data(data)
+				return JsonResponse({'status': 'success', 'message': response_message}, status=status.HTTP_200_OK)
+	except json.JSONDecodeError:
+		return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
+	except Exception as e:
+		logger.error(f"Error processing request: {e}")
+		return JsonResponse({'status': 'error', 'message': 'Error processing request'}, status=500)
 
 @api_view(['GET'])
 @authentication_classes([JWTAuthentication])
